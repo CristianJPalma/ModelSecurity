@@ -62,7 +62,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="RolUser" Relationship="DBModel.UserRolUser" FromRole="User" ToRole="RolUser" />
-          <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="UserName" Type="String" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" />
           <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
@@ -122,10 +123,9 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="FormModule" Relationship="DBModel.ModuleFormModule" FromRole="Module" ToRole="FormModule" />
           <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Active" Nullable="false" Type="Boolean" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" />
           <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
-          <Property Name="Active" Nullable="false" Type="Boolean" />
-          <Property Name="Code" Type="String" Nullable="false" />
         </EntityType>
         <EntityType Name="Form">
           <Key>
@@ -135,8 +135,9 @@
           <NavigationProperty Name="FormModule" Relationship="DBModel.FormFormModule" FromRole="Form" ToRole="FormModule" />
           <NavigationProperty Name="RolFormPermission" Relationship="DBModel.FormRolFormPermission" FromRole="Form" ToRole="RolFormPermission" />
           <Property Name="Name" Type="String" Nullable="false" />
-          <Property Name="CreateAt" Type="DateTime" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateAt" Type="DateTime" Nullable="false" />
           <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
         </EntityType>
         <EntityType Name="FormModule">
@@ -181,8 +182,9 @@
           <Property Name="Name" Type="String" Nullable="false" />
           <NavigationProperty Name="RolFormPermission" Relationship="DBModel.PermissionRolFormPermission" FromRole="Permission" ToRole="RolFormPermission" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
-          <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" />
+          <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
         </EntityType>
         <EntityType Name="RolFormPermission">
           <Key>
@@ -237,6 +239,9 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableId" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" />
         </EntityType>
         <EntityType Name="Person">
           <Key>
@@ -244,6 +249,9 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="User" Relationship="DBModel.PersonUser" FromRole="Person" ToRole="User" />
+          <Property Name="FirstName" Type="String" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" />
+          <Property Name="email" Type="String" Nullable="false" />
         </EntityType>
         <Association Name="PersonUser">
           <End Type="DBModel.Person" Role="Person" Multiplicity="1" />
