@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Diagram
+namespace Entity.DTOs
 {
-    public class Class1
+    class Rol
     {
     }
 }

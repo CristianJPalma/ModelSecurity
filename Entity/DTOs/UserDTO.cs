@@ -1,30 +1,27 @@
-﻿using System;
+﻿using Entity.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entity.Model
+namespace Entity.DTOs
 {
-    class User
+    class UserDTO
     {
         public int Id { get; set; }
-        public Person PersonId { get; set; }
+        public PersonDTO PersonId { get; set; }
         public string UserName { get; set; }
         public string Code { get; set; }
         public bool Active { get; set; }
-        public DateTime CreateAt { get; set; }
-        public DateTime DeletAt { get; set; }
 
-        public User(int id, Person personId, string userName, string code, bool active, DateTime createAt, DateTime deletAt)
+        public UserDTO(int id, PersonDTO personId, string userName, string code, bool active)
         {
             Id = id;
             PersonId = personId;
             UserName = userName;
             Code = code;
             Active = active;
-            CreateAt = createAt;
-            DeletAt = deletAt;
         }
     }
 }
