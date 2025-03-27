@@ -78,6 +78,80 @@ namespace Entity.Context
             EnsureAudit();
             return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
+        ///<summary>
+        ///Ejecuta una consulta SQL utilizando Dapper y devuelve una coleccion de resultados de tipo gemerico
+        /// </summary>
+        /// <typeparam name="T">Tipo de los datos de retorno</typeparam>
+        /// <param name="text">Consulta SQL a ejecutar</param>
+        /// <param name="parameters">Parametros opcionales de la consulta</param>
+        /// <param name="timeout">Tiempo de espera opcional para la consulta</param>
+        /// <param name="type">Tipo opcional de comando SQL</param>
+        /// <returns>Una coleccion de objetos del tipo especificado</returns>
+        public async Task<IEnumerable<T>> QueryAsync<T>(string text, object parameters = null, int? timeout = null, CommandType?  type = null)
+        {
+            using var command = new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
+            var connection = this.Database.GetDbConnection();
+            return await connection.QueryAsync<T>(command.Definition);
+        }
+
+        ///<summary>
+        ///Ejecuta una consulta SQl utilizando Dapper y devuelve un solo resultado o el valor predeterminado si no hay resultados
+        /// </summary>
+        /// <typeparam name="T">Tipo de los datos de retorno</typeparam>
+        /// <param name="text">Consulta SQL a ejecutar</param>
+        /// <param name="parameters">Parametros opcionales de la consulta</param>
+        /// <param name="timeout">Tiempo de espera opcional para la consulta</param>
+        /// <param name="type">Tipo opcional de comando SQL</param>
+        /// <returns>Un objeto del tipo especificado o su valor predetermiando</returns>
+        public async Task<T> QueryFirstOrDefaultAsync<T>(string text, object parameters = null, int? timeout = null, CommandType? type = null)
+        {
+            using var command new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
+            var connection = this.Database.GetDbConnection();
+            return await connection.QueryFirstOrDefaultAsync<T>(command.Definition);
+        }
+        ///<summary>
+        ///Metodo interno para garantizar la autoria de los cambios en las entidades
+        /// </summary>
+        private void EnsureAudit()
+        {
+            ChangeTracker.DetectChanges();
+        }
+
+        ///<summary>
+        ///Estructura para ejecutar comandos SQL con Dapper en Entity Framework Core
+        /// </summary>
+        public readonly struct DapperEFCoreCommand : IDisposable
+        {
+            ///<summary>
+            ///Constructor del comando Dapper
+            ///</summary>
+            ///<param name="context">Contexto de la base de datos</param>
+            ///<param name="text">Consulta SQL</param>
+            ///<param name="parameters">Parametros opcionales</param>
+            ///<param name="timeout">Tiempo de espera opcional</param>
+            ///<param name="type">Tipo de comando >SQL opcional</param>
+            ///<param name="ct">Token de cancelacion</param>
+            public DapperEFCoreCommand(DbContext context, string text, object parameters, int? timeout, CommandType? type, CancellationToken ct)
+            {
+                var transaction = context.Database.CurrentTransaction?.GetDbTransaction();
+                var commandType = type ?? CommandType.Text;
+                var commandTimeout = timeout ?? context.Database.GetCommandTimeout() ?? 30;
+
+                Definition = new CommandDefinition(text, paramers, transaction, commandTimeout, commandType, CancellationToken: ct);
+            }
+
+            ///<summary>
+            ///Define los parametros del comando SQL
+            ///</summary>
+            public CommandDefinition Definition { get; }
+
+            ///<summary>
+            ///Metodo para liberar los recursos
+            ///</summary>
+            public void Dispose()
+            {
+            }
+        }
 
     }
 }

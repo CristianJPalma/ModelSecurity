@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\Business.csproj": {}
+    "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Business\\Business.csproj": {}
   },
   "projects": {
-    "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\Business.csproj": {
+    "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Business\\Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\Business.csproj",
+        "projectUniqueName": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Business\\Business.csproj",
         "projectName": "Business",
-        "projectPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\Business.csproj",
-        "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\obj\\",
+        "projectPath": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Business\\Business.csproj",
+        "packagesPath": "C:\\Users\\Cristian\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Business\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\SENA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Cristian\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -65,7 +65,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.201/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
