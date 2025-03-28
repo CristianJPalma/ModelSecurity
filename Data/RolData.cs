@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Entity.Context;
+﻿using Entity.Context;
 using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -52,7 +51,7 @@ namespace Data
             return await _context.Set<Rol>().ToListAsync();
         }
         ///<summary>Obtiene un rol especifico por su identificador</summary>
-        public async Task<Rol?> GestByIdAsync(int id)
+        public async Task<Rol?> GetByIdAsync(int id)
         {
             try
             {
