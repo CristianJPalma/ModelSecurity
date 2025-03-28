@@ -31,7 +31,7 @@ namespace Entity.Context
         /// Configura los modelos de la base de datos aplicando configuraciones desde ensamblados.
         /// </summary>
         /// <param name="modelBuilder">Constructor del modelo de base de datos</param>
-        protected override void OnModuleCreaating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
@@ -105,9 +105,9 @@ namespace Entity.Context
         /// <returns>Un objeto del tipo especificado o su valor predetermiando</returns>
         public async Task<T> QueryFirstOrDefaultAsync<T>(string text, object parameters = null, int? timeout = null, CommandType? type = null)
         {
-            using var command new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
+            using var command = new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
             var connection = this.Database.GetDbConnection();
-            return await connection.QueryFirstOrDefaultAsync<T>(command.Definition);
+            return await connection.QueryFirstOrDefaultAsync<T>(command: command.Definition);
         }
         ///<summary>
         ///Metodo interno para garantizar la autoria de los cambios en las entidades
@@ -137,7 +137,7 @@ namespace Entity.Context
                 var commandType = type ?? CommandType.Text;
                 var commandTimeout = timeout ?? context.Database.GetCommandTimeout() ?? 30;
 
-                Definition = new CommandDefinition(text, paramers, transaction, commandTimeout, commandType, CancellationToken: ct);
+                Definition = new CommandDefinition(text, parameters, transaction, commandTimeout, commandType, cancellationToken: ct);
             }
 
             ///<summary>

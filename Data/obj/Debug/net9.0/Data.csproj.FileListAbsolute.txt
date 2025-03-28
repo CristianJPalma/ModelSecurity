@@ -1,0 +1,5 @@
+C:\Users\SENA\source\repos\ModelSecurity\Data\obj\Debug\net9.0\Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\SENA\source\repos\ModelSecurity\Data\obj\Debug\net9.0\Data.AssemblyInfoInputs.cache
+C:\Users\SENA\source\repos\ModelSecurity\Data\obj\Debug\net9.0\Data.AssemblyInfo.cs
+C:\Users\SENA\source\repos\ModelSecurity\Data\obj\Debug\net9.0\Data.csproj.CoreCompileInputs.cache
+C:\Users\SENA\source\repos\ModelSecurity\Data\obj\Debug\net9.0\Data.sourcelink.json

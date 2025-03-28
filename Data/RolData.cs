@@ -17,7 +17,7 @@ namespace Data
         ///Constructor que recibe el contexto de la base de datos
         ///</summary>
         ///<param name="context">Instancia de <see cref="ApplicationDbContext"/>para la conexion con la base de datos</param>
-        public RolData(ApplicationDbContext context, Ilogger logger)
+        public RolData(ApplicationDbContext context, ILogger logger)
         {
             _context = context;
             _logger = logger;
@@ -73,7 +73,7 @@ namespace Data
         {
             try
             {
-                await _context.Set<Rol>().Update(rol);
+                _context.Set<Rol>().Update(rol);
                 await _context.SaveChangesAsync();
                 return true;
             }

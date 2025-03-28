@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    class Rol
+    class RolDTO
     {
     }
 }
