@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class RolUserDTO
+    public class RolUserDto
     {
         public int Id { get; set; }
-        public UserDTO UserId { get; set; }
-        public RolDto RolId { get; set; }
+        public int UserId { get; set; }
+        public UserDto User { get; set; } = new UserDto();
+        public int RolId { get; set; }
+        public RolDto RolDto { get; set; } = new RolDto();
 
-        public RolUserDTO(int id, UserDTO userId, RolDto rolId)
-        {
-            Id = id;
-            UserId = userId;
-            RolId = rolId;
-        }
     }
 }

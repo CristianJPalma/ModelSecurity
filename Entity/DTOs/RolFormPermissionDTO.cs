@@ -7,19 +7,15 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class RolFormPermissionDTO
+    public class RolFormPermissionDto
     {
         public int Id { get; set; }
-        public RolDto RolId { get; set; }
-        public PermissionDTO PermissionId { get; set; }
-        public FormDTO FormId { get; set; }
-
-        public RolFormPermissionDTO(int id, RolDto rolId, PermissionDTO permissionId, FormDTO formId)
-        {
-            Id = id;
-            RolId = rolId;
-            PermissionId = permissionId;
-            FormId = formId;
-        }
+        public int RolId { get; set; }
+        public RolDto Rol { get; set; } = new RolDto();
+        public int PermissionId { get; set; }
+        public PermissionDto Permission { get; set; } = new PermissionDto();
+        public int FormId { get; set; }
+        public FormDto Form { get; set; } = new FormDto();
+            
     }
 }

@@ -7,21 +7,15 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class UserDTO
+    public class UserDto
     {
         public int Id { get; set; }
-        public PersonDTO PersonId { get; set; }
+        public int PersonId { get; set; }
+        public PersonDto Person { get; set; } = new PersonDto();
         public string UserName { get; set; }
         public string Code { get; set; }
         public bool Active { get; set; }
 
-        public UserDTO(int id, PersonDTO personId, string userName, string code, bool active)
-        {
-            Id = id;
-            PersonId = personId;
-            UserName = userName;
-            Code = code;
-            Active = active;
-        }
+
     }
 }
