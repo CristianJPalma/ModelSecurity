@@ -98,12 +98,13 @@ namespace Business
                 {
                     Id = formModuleCreado.Id,
                     FormId = formModuleCreado.FormId,
-                    ModuleId = formModuleCreado.ModuleId // Si existe en la entidad
+                    ModuleId = formModuleCreado.ModuleId
                 };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleFormId}", formModuleDto?.FormId ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleFormId}" ,formModuleDto.FormId <= 0);
+                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleModuleId}", formModuleDto.ModuleId <= 0);
                 throw new ExternalServiceException("Base de datos", "Error al crear el formModule", ex);
             }
         }
@@ -116,10 +117,15 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto formModule no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(formModuleDto.FormId))
+            if (formModuleDto.FormId <= 0)
             {
-                _logger.LogWarning("Se intentó crear/actualizar un formModule con Name vacío");
-                throw new Utilities.Exceptions.ValidationException("Name", "El Name del formModule es obligatorio");
+                _logger.LogWarning("Se intentó crear/actualizar un formModule con FormId vacío");
+                throw new Utilities.Exceptions.ValidationException("FormId", "El FormId del formModule es obligatorio");
+            }
+            if (formModuleDto.ModuleId <= 0)
+            {
+                _logger.LogWarning("Se intentó crear/actualizar un formModule con ModuleId vacío");
+                throw new Utilities.Exceptions.ValidationException("ModuleId", "El ModuleId del formModule es obligatorio");
             }
         }
     }

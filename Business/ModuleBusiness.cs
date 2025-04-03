@@ -34,7 +34,7 @@ namespace Business
                     {
                         Id = module.Id,
                         Name = module.Name,
-                        Active = module.Active // Si existe en la entidad
+                        Active = module.Active 
                     });
                 }
 

@@ -52,7 +52,7 @@ namespace Data
             return await _context.Set<RolUser>().ToListAsync();
         }
         ///<summary>Obtiene un RolUser especifico por su identificador</summary>
-        public async Task<RolUser?> GestByIdAsync(int id)
+        public async Task<RolUser?> GetByIdAsync(int id)
         {
             try
             {

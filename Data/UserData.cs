@@ -51,7 +51,7 @@ namespace Data
             return await _context.Set<User>().ToListAsync();
         }
         ///<summary>Obtiene un usuario especifico por su identificador</summary>
-        public async Task<User?> GestByIdAsync(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
             try
             {

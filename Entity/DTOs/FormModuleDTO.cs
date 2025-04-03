@@ -12,10 +12,7 @@ namespace Entity.DTOs
     {
         public int Id { get; set; }
         public int ModuleId { get; set; }
-        public ModuleDto Module { get; set; } = new ModuleDto();
         public int FormId { get; set; }
-        public FormDto Form { get; set; } = new FormDto();
-
 
     }
 }

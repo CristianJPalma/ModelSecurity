@@ -11,9 +11,7 @@ namespace Entity.DTOs
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public UserDto User { get; set; } = new UserDto();
         public int RolId { get; set; }
-        public RolDto RolDto { get; set; } = new RolDto();
 
     }
 }

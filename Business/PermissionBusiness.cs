@@ -34,7 +34,8 @@ namespace Business
                     {
                         Id = permission.Id,
                         Name = permission.Name,
-                        Active = permission.Active // Si existe en la entidad
+                        Code = permission.Code,
+                        Active = permission.Active
                     });
                 }
 
@@ -69,6 +70,7 @@ namespace Business
                 {
                     Id = permission.Id,
                     Name = permission.Name,
+                    Code = permission.Code,
                     Active = permission.Active
                 };
             }
@@ -89,7 +91,8 @@ namespace Business
                 var permission = new Permission
                 {
                     Name = permissionDto.Name,
-                    Active = permissionDto.Active // Si existe en la entidad
+                    Code = permissionDto.Code,
+                    Active = permissionDto.Active
                 };
 
                 var permissionCreado = await _permissionData.CreateAsync(permission);
@@ -98,6 +101,7 @@ namespace Business
                 {
                     Id = permissionCreado.Id,
                     Name = permissionCreado.Name,
+                    Code = permissionCreado.Code,
                     Active = permissionCreado.Active // Si existe en la entidad
                 };
             }

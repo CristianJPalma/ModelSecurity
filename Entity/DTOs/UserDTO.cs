@@ -11,7 +11,6 @@ namespace Entity.DTOs
     {
         public int Id { get; set; }
         public int PersonId { get; set; }
-        public PersonDto Person { get; set; } = new PersonDto();
         public string UserName { get; set; }
         public string Code { get; set; }
         public bool Active { get; set; }
