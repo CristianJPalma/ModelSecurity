@@ -1,26 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\",
+  "WorkspaceRootPath": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\web\\controllers\\permissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\permissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\web\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\usercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\web\\controllers\\modulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\modulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\web\\controllers\\rolusercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\rolusercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\web\\controllers\\formmodulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\formmodulecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\web\\controllers\\rolformpermissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\rolformpermissioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\web\\controllers\\formcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\formcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{AD502254-FA18-4D21-BAC1-3C33C0E1C44C}|Entity\\Entity.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\entity\\model\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{AD502254-FA18-4D21-BAC1-3C33C0E1C44C}|Entity\\Entity.csproj|solutionrelative:entity\\model\\rol.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\web\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\controllers\\personcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -35,66 +31,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "PermissionController.cs",
-              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\PermissionController.cs",
-              "RelativeDocumentMoniker": "Web\\Controllers\\PermissionController.cs",
-              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\PermissionController.cs",
-              "RelativeToolTip": "Web\\Controllers\\PermissionController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAARAAAAAAAAAA==",
+              "Title": "UserController.cs",
+              "DocumentMoniker": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\UserController.cs",
+              "RelativeDocumentMoniker": "Web\\Controllers\\UserController.cs",
+              "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\UserController.cs",
+              "RelativeToolTip": "Web\\Controllers\\UserController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHUAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T02:34:11.988Z",
+              "WhenOpened": "2025-04-03T21:45:22.042Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ModuleController.cs",
-              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\ModuleController.cs",
-              "RelativeDocumentMoniker": "Web\\Controllers\\ModuleController.cs",
-              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\ModuleController.cs",
-              "RelativeToolTip": "Web\\Controllers\\ModuleController.cs",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAwwAkAAAABAAAAAAAAAA==",
+              "Title": "RolUserController.cs",
+              "DocumentMoniker": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\RolUserController.cs",
+              "RelativeDocumentMoniker": "Web\\Controllers\\RolUserController.cs",
+              "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\RolUserController.cs",
+              "RelativeToolTip": "Web\\Controllers\\RolUserController.cs",
+              "ViewState": "AgIAAF4AAAAAAAAAAAAAAGsAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T02:25:32.482Z",
+              "WhenOpened": "2025-04-03T21:42:54.262Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "FormModuleController.cs",
-              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\FormModuleController.cs",
-              "RelativeDocumentMoniker": "Web\\Controllers\\FormModuleController.cs",
-              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\FormModuleController.cs*",
-              "RelativeToolTip": "Web\\Controllers\\FormModuleController.cs*",
-              "ViewState": "AgIAAGAAAAAAAAAAAAAuwHUAAAANAAAAAAAAAA==",
+              "Title": "RolFormPermissionController.cs",
+              "DocumentMoniker": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\RolFormPermissionController.cs",
+              "RelativeDocumentMoniker": "Web\\Controllers\\RolFormPermissionController.cs",
+              "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\RolFormPermissionController.cs",
+              "RelativeToolTip": "Web\\Controllers\\RolFormPermissionController.cs",
+              "ViewState": "AgIAAF0AAAAAAAAAAAAAAH0AAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T02:18:26.328Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Rol.cs",
-              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Entity\\Model\\Rol.cs",
-              "RelativeDocumentMoniker": "Entity\\Model\\Rol.cs",
-              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Entity\\Model\\Rol.cs",
-              "RelativeToolTip": "Entity\\Model\\Rol.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T02:15:53.133Z",
+              "WhenOpened": "2025-04-03T21:38:38.952Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "FormController.cs",
-              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\FormController.cs",
-              "RelativeDocumentMoniker": "Web\\Controllers\\FormController.cs",
-              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Controllers\\FormController.cs",
-              "RelativeToolTip": "Web\\Controllers\\FormController.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAwwBoAAABMAAAAAAAAAA==",
+              "Title": "PersonController.cs",
+              "DocumentMoniker": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\PersonController.cs",
+              "RelativeDocumentMoniker": "Web\\Controllers\\PersonController.cs",
+              "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Controllers\\PersonController.cs",
+              "RelativeToolTip": "Web\\Controllers\\PersonController.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAD4vxcAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-03T02:07:23.634Z",
+              "WhenOpened": "2025-04-03T21:29:44.979Z",
               "EditorCaption": ""
             }
           ]
