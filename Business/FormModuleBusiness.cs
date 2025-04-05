@@ -128,5 +128,37 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("ModuleId", "El ModuleId del formModule es obligatorio");
             }
         }
+        // Método para mapear de FormModule a FormModuleDTO
+        private FormModuleDto MapToDTO(FormModule formModule)
+        {
+            return new FormModuleDto
+            {
+                Id = formModule.Id,
+                FormId = formModule.FormId,
+                ModuleId = formModule.ModuleId
+            };
+        }
+
+        //Metodo para mapear de FormModuleDTO a FormModule
+        private FormModule MapToEntity(FormModuleDto formModuleDTO)
+        {
+            return new FormModule
+            {
+                Id = formModuleDTO.Id,
+                FormId = formModuleDTO.FormId,
+                ModuleId = formModuleDTO.ModuleId
+
+            };
+        }
+        // Método para mapear una lista de FormModule a una lista de FormModuleDTO
+        private IEnumerable<FormModuleDto> MapToDTOList(IEnumerable<FormModule> formModules)
+        {
+            var formModulesDTO = new List<FormModuleDto>();
+            foreach (var formModule in formModules)
+            {
+                formModulesDTO.Add(MapToDTO(formModule));
+            }
+            return formModulesDTO;
+        }
     }
 }

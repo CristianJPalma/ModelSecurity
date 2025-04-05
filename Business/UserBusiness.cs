@@ -126,5 +126,39 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("UserName", "El UserName del usuario es obligatorio");
             }
         }
+        // Método para mapear de User a UserDTO
+        private UserDto MapToDTO(User User)
+        {
+            return new UserDto
+            {
+                Id = User.Id,
+                UserName = User.UserName,
+                Code = User.Code,
+                Active = User.Active
+            };
+        }
+
+        //Metodo para mapear de UserDTO a User
+        private User MapToEntity(UserDto UserDTO)
+        {
+            return new User
+            {
+                Id = UserDTO.Id,
+                UserName = UserDTO.UserName,
+                Code = UserDTO.Code,
+                Active = UserDTO.Active
+
+            };
+        }
+        // Método para mapear una lista de User a una lista de UserDTO
+        private IEnumerable<UserDto> MapToDTOList(IEnumerable<User> Users)
+        {
+            var UsersDTO = new List<UserDto>();
+            foreach (var User in Users)
+            {
+                UsersDTO.Add(MapToDTO(User));
+            }
+            return UsersDTO;
+        }
     }
 }

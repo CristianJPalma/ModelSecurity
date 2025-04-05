@@ -1,9 +1,12 @@
 ﻿using Dapper;
+using Entity.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Reflection;
+using System.Reflection.Emit;
+using Module = Entity.Model.Module;
 
 namespace Entity.Context
 {
@@ -27,16 +30,29 @@ namespace Entity.Context
         {
             _configuration = configuration;
         }
+        /// DB SETS
+        public DbSet<Form> Form { get; set; }
+        public DbSet<FormModule> FormModule { get; set; }
+        public DbSet<Module> Module { get; set; }
+        public DbSet<Permission> Permission { get; set; }
+        public DbSet<Person> Person { get; set; }
+        public DbSet<Rol> Rol { get; set; }
+        public DbSet<RolFormPermission> RolFormPermission { get; set; }
+        public DbSet<RolUser> RolUser { get; set; }
+        public DbSet<User> User { get; set; }
         /// <summary>
         /// Configura los modelos de la base de datos aplicando configuraciones desde ensamblados.
         /// </summary>
         /// <param name="modelBuilder">Constructor del modelo de base de datos</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Person>()
+            .HasOne(p => p.User)
+            .WithOne(u => u.Person)
+            .HasForeignKey<User>(u => u.PersonId); // Especifica la clave foránea
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            base.OnModelCreating(modelBuilder);
         }
 
         ///<summary>

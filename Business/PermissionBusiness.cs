@@ -126,5 +126,39 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del permiso es obligatorio");
             }
         }
+        // Método para mapear de Permission a PermissionDTO
+        private PermissionDto MapToDTO(Permission Permission)
+        {
+            return new PermissionDto
+            {
+                Id = Permission.Id,
+                Name = Permission.Name,
+                Code = Permission.Code,
+                Active = Permission.Active
+            };
+        }
+
+        //Metodo para mapear de PermissionDTO a Permission
+        private Permission MapToEntity(PermissionDto PermissionDTO)
+        {
+            return new Permission
+            {
+                Id = PermissionDTO.Id,
+                Name = PermissionDTO.Name,
+                Code = PermissionDTO.Code,
+                Active = PermissionDTO.Active
+
+            };
+        }
+        // Método para mapear una lista de Permission a una lista de PermissionDTO
+        private IEnumerable<PermissionDto> MapToDTOList(IEnumerable<Permission> Permissions)
+        {
+            var PermissionsDTO = new List<PermissionDto>();
+            foreach (var Permission in Permissions)
+            {
+                PermissionsDTO.Add(MapToDTO(Permission));
+            }
+            return PermissionsDTO;
+        }
     }
 }

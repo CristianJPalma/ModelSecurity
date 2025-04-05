@@ -139,5 +139,39 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("FormId", "El Name del rolFormPermission es obligatorio");
             }
         }
+        // Método para mapear de RolFormPermission a RolFormPermissionDTO
+        private RolFormPermissionDto MapToDTO(RolFormPermission rolFormPermission)
+        {
+            return new RolFormPermissionDto
+            {
+                Id = rolFormPermission.Id,
+                RolId = rolFormPermission.RolId,
+                PermissionId = rolFormPermission.PermissionId,
+                FormId = rolFormPermission.FormId
+            };
+        }
+
+        //Metodo para mapear de RolFormPermissionDTO a RolFormPermission
+        private RolFormPermission MapToEntity(RolFormPermissionDto rolFormPermissionDTO)
+        {
+            return new RolFormPermission
+            {
+                Id = rolFormPermissionDTO.Id,
+                RolId = rolFormPermissionDTO.RolId,
+                PermissionId = rolFormPermissionDTO.PermissionId,
+                FormId = rolFormPermissionDTO.FormId
+
+            };
+        }
+        // Método para mapear una lista de RolFormPermission a una lista de RolFormPermissionDTO
+        private IEnumerable<RolFormPermissionDto> MapToDTOList(IEnumerable<RolFormPermission> rolFormPermissions)
+        {
+            var rolFormPermissionsDTO = new List<RolFormPermissionDto>();
+            foreach (var rolFormPermission in rolFormPermissions)
+            {
+                rolFormPermissionsDTO.Add(MapToDTO(rolFormPermission));
+            }
+            return rolFormPermissionsDTO;
+        }
     }
 }

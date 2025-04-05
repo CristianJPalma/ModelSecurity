@@ -126,5 +126,40 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("FirstName", "El FirstName de la persona es obligatorio");
             }
         }
+
+        // Método para mapear de Person a PersonDTO
+        private PersonDto MapToDTO(Person Person)
+        {
+            return new PersonDto
+            {
+                Id = Person.Id,
+                FirstName = Person.FirstName,
+                LastName = Person.LastName,
+                Email = Person.Email
+            };
+        }
+
+        //Metodo para mapear de PersonDTO a Person
+        private Person MapToEntity(PersonDto PersonDTO)
+        {
+            return new Person
+            {
+                Id = PersonDTO.Id,
+                FirstName = PersonDTO.FirstName,
+                LastName = PersonDTO.LastName,
+                Email = PersonDTO.Email
+
+            };
+        }
+        // Método para mapear una lista de Person a una lista de PersonDTO
+        private IEnumerable<PersonDto> MapToDTOList(IEnumerable<Person> Persons)
+        {
+            var PersonsDTO = new List<PersonDto>();
+            foreach (var Person in Persons)
+            {
+                PersonsDTO.Add(MapToDTO(Person));
+            }
+            return PersonsDTO;
+        }
     }
 }

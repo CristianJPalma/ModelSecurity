@@ -34,6 +34,7 @@ namespace Business
                     {
                         Id = rol.Id,
                         Name = rol.Name,
+                        Description = rol.Description,
                         Active = rol.Active // Si existe en la entidad
                     });
                 }
@@ -69,6 +70,7 @@ namespace Business
                 {
                     Id = rol.Id,
                     Name = rol.Name,
+                    Description = rol.Name,
                     Active = rol.Active
                 };
             }
@@ -89,6 +91,7 @@ namespace Business
                 var rol = new Rol
                 {
                     Name = RolDto.Name,
+                    Description = RolDto.Description,
                     Active = RolDto.Active // Si existe en la entidad
                 };
 
@@ -98,6 +101,7 @@ namespace Business
                 {
                     Id = rolCreado.Id,
                     Name = rolCreado.Name,
+                    Description = rolCreado.Description,
                     Active = rolCreado.Active // Si existe en la entidad
                 };
             }
@@ -121,6 +125,41 @@ namespace Business
                 _logger.LogWarning("Se intentó crear/actualizar un rol con Name vacío");
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del rol es obligatorio");
             }
+        }
+
+        // Método para mapear de Rol a RolDTO
+        private RolDto MapToDTO(Rol rol)
+        {
+            return new RolDto
+            {
+                Id = rol.Id,
+                Name = rol.Name,
+                Description = rol.Description,
+                Active = rol.Active
+            };
+        }
+
+        //Metodo para mapear de RolDTO a Rol
+        private Rol MapToEntity(RolDto rolDTO)
+        {
+            return new Rol
+            {
+                Id = rolDTO.Id,
+                Name = rolDTO.Name,
+                Description = rolDTO.Description,
+                Active = rolDTO.Active
+
+            };
+        }
+        // Método para mapear una lista de Rol a una lista de RolDTO
+        private IEnumerable<RolDto> MapToDTOList(IEnumerable<Rol> roles)
+        {
+            var rolesDTO = new List<RolDto>();
+            foreach (var rol in roles)
+            {
+                rolesDTO.Add(MapToDTO(rol));
+            }
+            return rolesDTO;
         }
     }
 }

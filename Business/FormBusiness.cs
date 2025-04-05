@@ -125,5 +125,39 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("Name", "El Name del formulario es obligatorio");
             }
         }
+        // Método para mapear de Form a FormDTO
+        private FormDto MapToDTO(Form form)
+        {
+            return new FormDto
+            {
+                Id = form.Id,
+                Name = form.Name,
+                Code = form.Code,
+                Active = form.Active
+            };
+        }
+
+        //Metodo para mapear de FormDTO a Form
+        private Form MapToEntity(FormDto formDTO)
+        {
+            return new Form
+            {
+                Id = formDTO.Id,
+                Name = formDTO.Name,
+                Code = formDTO.Code,
+                Active = formDTO.Active
+
+            };
+        }
+        // Método para mapear una lista de Form a una lista de FormDTO
+        private IEnumerable<FormDto> MapToDTOList(IEnumerable<Form> forms)
+        {
+            var formsDTO = new List<FormDto>();
+            foreach (var form in forms)
+            {
+                formsDTO.Add(MapToDTO(form));
+            }
+            return formsDTO;
+        }
     }
 }

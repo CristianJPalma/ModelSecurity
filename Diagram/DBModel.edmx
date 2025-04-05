@@ -78,6 +78,7 @@
           <NavigationProperty Name="RolUser" Relationship="DBModel.RolRolUser" FromRole="Rol" ToRole="RolUser" />
           <NavigationProperty Name="RolFormPermission" Relationship="DBModel.RolRolFormPermission" FromRole="Rol" ToRole="RolFormPermission" />
           <Property Name="Name" Type="String" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="CreateAt" Type="DateTime" Nullable="false" />
           <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
