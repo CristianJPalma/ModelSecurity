@@ -55,6 +55,16 @@
             <End Role="Person" EntitySet="Persons" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="Advices" EntityType="DBModel.Advice" />
+          <EntitySet Name="NotificationSet" EntityType="DBModel.Notification" />
+          <AssociationSet Name="UserNotification" Association="DBModel.UserNotification">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Notification" EntitySet="NotificationSet" />
+          </AssociationSet>
+          <AssociationSet Name="AdviceNotification" Association="DBModel.AdviceNotification">
+            <End Role="Advice" EntitySet="Advices" />
+            <End Role="Notification" EntitySet="NotificationSet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="User">
           <Key>
@@ -69,6 +79,7 @@
           <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
           <NavigationProperty Name="Person" Relationship="DBModel.PersonUser" FromRole="User" ToRole="Person" />
           <Property Name="PersonId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Notification" Relationship="DBModel.UserNotification" FromRole="User" ToRole="Notification" />
         </EntityType>
         <EntityType Name="Rol">
           <Key>
@@ -263,6 +274,55 @@
             </Principal>
             <Dependent Role="User">
               <PropertyRef Name="PersonId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Advice">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="Topic" Type="String" Nullable="false" />
+          <Property Name="Frequency" Type="String" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="CreateAt" Type="String" Nullable="false" />
+          <Property Name="DeleteAt" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Notification" Relationship="DBModel.AdviceNotification" FromRole="Advice" ToRole="Notification" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="AdviceId" Type="Int32" Nullable="false" />
+          <Property Name="SentAt" Type="String" Nullable="false" />
+          <Property Name="Seen" Type="String" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="DBModel.UserNotification" FromRole="Notification" ToRole="User" />
+          <NavigationProperty Name="Advice" Relationship="DBModel.AdviceNotification" FromRole="Notification" ToRole="Advice" />
+        </EntityType>
+        <Association Name="UserNotification">
+          <End Type="DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="DBModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AdviceNotification">
+          <End Type="DBModel.Advice" Role="Advice" Multiplicity="1" />
+          <End Type="DBModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Advice">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="AdviceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

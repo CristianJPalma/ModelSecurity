@@ -125,6 +125,27 @@ namespace Entity.Context
             var connection = this.Database.GetDbConnection();
             return await connection.QueryFirstOrDefaultAsync<T>(command: command.Definition);
         }
+        //SobreCarga
+        //public async Task<int>nQueryFirstOrDefaultAsync(string text, object parameters = null, int? timeout = null, CommandType? type = null)
+        //{
+        //  using var command = new DapperEFCoreCommand(this, text, parameters = null, int? timeout = null, CommandType? type = null)
+        //  var connection = this.Database.GetDbConnection();
+        //  return await connection.ExecuteAsync(command.Definition);
+        //}
+
+        public async Task<int> ExecuteAsync(String text, object parameters = null, int? timeout = null, CommandType? type = null)
+        {
+            using var command = new DapperEFCoreCommand(this, text, parameters, timeout, type, CancellationToken.None);
+            var connection = this.Database.GetDbConnection();
+            return await connection.ExecuteAsync(command.Definition);
+        }
+        //Devolver Objeto
+        public async Task<T> ExecuteScalarAsync<T>(string query, object parameters = null, int? timeout = null, CommandType? type = null)
+        {
+            using var command = new DapperEFCoreCommand(this, query, parameters, timeout, type, CancellationToken.None);
+            var connection = this.Database.GetDbConnection();
+            return await connection.ExecuteScalarAsync<T>(command.Definition);
+        }
         ///<summary>
         ///Metodo interno para garantizar la autoria de los cambios en las entidades
         /// </summary>
