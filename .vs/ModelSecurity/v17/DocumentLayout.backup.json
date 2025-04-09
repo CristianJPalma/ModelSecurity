@@ -3,20 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{24236DA6-5DAE-4B31-A079-6EFCF466FD79}|Diagram\\Diagram.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\diagram\\dbmodel.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
-      "RelativeMoniker": "D:0:0:{24236DA6-5DAE-4B31-A079-6EFCF466FD79}|Diagram\\Diagram.csproj|solutionrelative:diagram\\dbmodel.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{AD502254-FA18-4D21-BAC1-3C33C0E1C44C}|Entity\\Entity.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\entity\\context\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{AD502254-FA18-4D21-BAC1-3C33C0E1C44C}|Entity\\Entity.csproj|solutionrelative:entity\\context\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\web\\web.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
-      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\web.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|c:\\users\\cristian\\source\\repos\\modelsecurity\\web\\web.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{0FA65BEB-5E8E-42D5-8ADE-76E8CC736AD9}|Web\\Web.csproj|solutionrelative:web\\web.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -51,26 +47,15 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "DBModel.edmx [Diagram1]",
-              "DocumentMoniker": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Diagram\\DBModel.edmx",
-              "RelativeDocumentMoniker": "Diagram\\DBModel.edmx",
-              "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Diagram\\DBModel.edmx [Diagram1]",
-              "RelativeToolTip": "Diagram\\DBModel.edmx [Diagram1]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
-              "WhenOpened": "2025-04-07T17:02:08.439Z",
-              "EditorCaption": " [Diagram1]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Entity\\Context\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Entity\\Context\\ApplicationDbContext.cs",
-              "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Entity\\Context\\ApplicationDbContext.cs",
-              "RelativeToolTip": "Entity\\Context\\ApplicationDbContext.cs",
-              "ViewState": "AgIAACkAAAAAAAAAAAA3wDAAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Entity\\Context\\ApplicationDbContext.cs*",
+              "RelativeToolTip": "Entity\\Context\\ApplicationDbContext.cs*",
+              "ViewState": "AgIAACsAAAAAAAAAAAAAAAgAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T15:18:04.103Z"
+              "WhenOpened": "2025-04-05T15:18:04.103Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -81,20 +66,20 @@
               "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Web.csproj",
               "RelativeToolTip": "Web\\Web.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-05T15:17:44.309Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-05T15:17:44.309Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Program.cs",
               "RelativeDocumentMoniker": "Web\\Program.cs",
               "ToolTip": "C:\\Users\\Cristian\\source\\repos\\ModelSecurity\\Web\\Program.cs",
               "RelativeToolTip": "Web\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEoAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-05T15:14:11.705Z"
+              "WhenOpened": "2025-04-05T15:14:11.705Z",
+              "EditorCaption": ""
             }
           ]
         }
