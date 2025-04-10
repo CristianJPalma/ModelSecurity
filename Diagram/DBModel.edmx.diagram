@@ -20,14 +20,10 @@
         <AssociationConnector Association="DBModel.RolRolFormPermission" />
         <AssociationConnector Association="DBModel.PermissionRolFormPermission" />
         <AssociationConnector Association="DBModel.FormRolFormPermission" />
-        <EntityTypeShape EntityType="DBModel.ChangeLog" Width="1.5" PointX="6.625" PointY="4.125" />
+        <EntityTypeShape EntityType="DBModel.ChangeLog" Width="1.5" PointX="6.625" PointY="3.875" />
         <EntityTypeShape EntityType="DBModel.Person" Width="1.5" PointX="1.125" PointY="3.5" />
         <AssociationConnector Association="DBModel.PersonUser" />
-        <EntityTypeShape EntityType="DBModel.Advice" Width="1.5" PointX="18" PointY="2" />
-        <EntityTypeShape EntityType="DBModel.Notification" Width="1.5" PointX="13.875" PointY="1.125" />
-        <AssociationConnector Association="DBModel.UserNotification" />
-        <AssociationConnector Association="DBModel.AdviceNotification" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>
