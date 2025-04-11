@@ -1,7 +1,24 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\business\\formmodulebusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|solutionrelative:business\\formmodulebusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\business\\personbusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|solutionrelative:business\\personbusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\business\\permissionbusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|solutionrelative:business\\permissionbusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|c:\\users\\sena\\source\\repos\\modelsecurity\\business\\modulebusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8904F9A8-F53E-46EB-A807-42E3974D9F1F}|Business\\Business.csproj|solutionrelative:business\\modulebusiness.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,6 +47,58 @@
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PersonBusiness.cs",
+              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\PersonBusiness.cs",
+              "RelativeDocumentMoniker": "Business\\PersonBusiness.cs",
+              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\PersonBusiness.cs",
+              "RelativeToolTip": "Business\\PersonBusiness.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:18:18.426Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PermissionBusiness.cs",
+              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\PermissionBusiness.cs",
+              "RelativeDocumentMoniker": "Business\\PermissionBusiness.cs",
+              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\PermissionBusiness.cs",
+              "RelativeToolTip": "Business\\PermissionBusiness.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:18:02.201Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ModuleBusiness.cs",
+              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\ModuleBusiness.cs",
+              "RelativeDocumentMoniker": "Business\\ModuleBusiness.cs",
+              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\ModuleBusiness.cs",
+              "RelativeToolTip": "Business\\ModuleBusiness.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:17:45.528Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FormModuleBusiness.cs",
+              "DocumentMoniker": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\FormModuleBusiness.cs",
+              "RelativeDocumentMoniker": "Business\\FormModuleBusiness.cs",
+              "ToolTip": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\FormModuleBusiness.cs",
+              "RelativeToolTip": "Business\\FormModuleBusiness.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T02:17:09.019Z",
+              "EditorCaption": ""
             }
           ]
         }

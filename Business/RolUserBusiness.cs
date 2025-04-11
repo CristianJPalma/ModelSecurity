@@ -12,9 +12,9 @@ namespace Business
     public class RolUserBusiness
     {
         private readonly RolUserData _rolUserData;
-        private readonly ILogger _logger;
+        private readonly ILogger<RolUserBusiness> _logger;
 
-        public RolUserBusiness(RolUserData rolUserData, ILogger logger)
+        public RolUserBusiness(RolUserData rolUserData, ILogger<RolUserBusiness> logger)
         {
             _rolUserData = rolUserData;
             _logger = logger;

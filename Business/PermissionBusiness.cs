@@ -12,9 +12,9 @@ namespace Business
     public class PermissionBusiness
     {
         private readonly PermissionData _permissionData;
-        private readonly ILogger _logger;
+        private readonly ILogger<PermissionBusiness> _logger;
 
-        public PermissionBusiness(PermissionData permissionData, ILogger logger)
+        public PermissionBusiness(PermissionData permissionData, ILogger<PermissionBusiness> logger)
         {
             _permissionData = permissionData;
             _logger = logger;

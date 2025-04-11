@@ -1,7 +1,7 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Web.csproj": {}
+    "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\web\\Web.csproj": {}
   },
   "projects": {
     "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Business\\Business.csproj": {
@@ -304,14 +304,14 @@
         }
       }
     },
-    "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Web.csproj": {
+    "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\web\\Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Web.csproj",
+        "projectUniqueName": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\web\\Web.csproj",
         "projectName": "Web",
-        "projectPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\Web.csproj",
+        "projectPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\web\\Web.csproj",
         "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Web\\obj\\",
+        "outputPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
