@@ -94,7 +94,7 @@ namespace Business
                     Code = permissionDto.Code,
                     Active = permissionDto.Active
                 };
-
+                permission.CreateAt = DateTime.Now;
                 var permissionCreado = await _permissionData.CreateAsync(permission);
 
                 return new PermissionDto

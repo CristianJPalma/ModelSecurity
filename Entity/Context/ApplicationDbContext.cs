@@ -46,10 +46,11 @@ namespace Entity.Context
         /// <param name="modelBuilder">Constructor del modelo de base de datos</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Person>()
-            .HasOne(p => p.User)
-            .WithOne(u => u.Person)
-            .HasForeignKey<User>(u => u.PersonId); // Especifica la clave foránea
+            modelBuilder.Entity<User>()
+            .HasOne(u => u.Person)
+            .WithMany(p => p.Users)
+            .HasForeignKey(u => u.PersonId)
+            .OnDelete(DeleteBehavior.Restrict);
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 

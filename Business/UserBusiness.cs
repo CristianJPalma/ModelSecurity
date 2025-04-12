@@ -94,7 +94,7 @@ namespace Business
                     Code = UserDto.Code,
                     Active = UserDto.Active
                 };
-
+                user.CreateAt = DateTime.Now;
                 var userCreado = await _userData.CreateAsync(user);
 
                 return new UserDto

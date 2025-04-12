@@ -91,7 +91,7 @@ namespace Business
                     Name = moduleDto.Name,
                     Active = moduleDto.Active // Si existe en la entidad
                 };
-
+                module.CreateAt = DateTime.Now;
                 var moduleCreado = await _moduleData.CreateAsync(module);
 
                 return new ModuleDto

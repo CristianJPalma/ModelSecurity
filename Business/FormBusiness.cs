@@ -87,13 +87,13 @@ namespace Business
             try
             {
                 ValidateForm(formDto);
-
                 var form = new Form
                 {
                     Name = formDto.Name,
                     Code = formDto.Code,
                     Active = formDto.Active
                 };
+                form.CreateAt = DateTime.Now;
 
                 var formCreado = await _formData.CreateAsync(form);
 
