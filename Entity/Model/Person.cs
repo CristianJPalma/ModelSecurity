@@ -12,6 +12,6 @@ namespace Entity.Model
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
-    public ICollection<User> Users { get; set; } = new List<User>();
+    public User User { get; set; }
     }
 }

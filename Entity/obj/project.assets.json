@@ -4751,11 +4751,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj",
+      "projectUniqueName": "C:\\xampp\\htdocs\\ModelSecurity\\Entity\\Entity.csproj",
       "projectName": "Entity",
-      "projectPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Entity\\Entity.csproj",
+      "projectPath": "C:\\xampp\\htdocs\\ModelSecurity\\Entity\\Entity.csproj",
       "packagesPath": "C:\\Users\\SENA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\SENA\\source\\repos\\ModelSecurity\\Entity\\obj\\",
+      "outputPath": "C:\\xampp\\htdocs\\ModelSecurity\\Entity\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

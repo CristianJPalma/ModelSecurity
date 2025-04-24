@@ -10,7 +10,7 @@ namespace Entity.Model
     {
         public int Id { get; set; }
         public int RolId { get; set; }
-        public Rol Rol { get; set; } = new Rol();
+        public Rol Rol { get; set; }
         public int PermissionId { get; set; }
         public Permission Permission { get; set; }
         public int FormId { get; set; }

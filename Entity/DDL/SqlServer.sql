@@ -54,7 +54,7 @@ CREATE TABLE Module (
 );
 
 
-CREATE TABLE RoleUser (
+CREATE TABLE RolUser (
     Id INT PRIMARY KEY IDENTITY(1,1),
     UserId INT NOT NULL,
     RolId INT NOT NULL,
@@ -62,7 +62,7 @@ CREATE TABLE RoleUser (
     FOREIGN KEY (RolId) REFERENCES Rol(Id)
 );
 
-CREATE TABLE RoleFormPermission (
+CREATE TABLE RolFormPermission (
     Id INT PRIMARY KEY IDENTITY(1,1),
     RolId INT NOT NULL,
     PermissionId INT NOT NULL,

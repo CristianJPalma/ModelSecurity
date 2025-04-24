@@ -70,7 +70,7 @@ namespace Business
                 {
                     Id = rol.Id,
                     Name = rol.Name,
-                    Description = rol.Name,
+                    Description = rol.Description,
                     Active = rol.Active
                 };
             }
@@ -107,7 +107,7 @@ namespace Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo rol: {RolNombre}", RolDto?.Name ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo rol: {RolDescription}", RolDto?.Description ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el rol", ex);
             }
         }
@@ -120,10 +120,10 @@ namespace Business
                 throw new Utilities.Exceptions.ValidationException("El objeto rol no puede ser nulo");
             }
 
-            if (string.IsNullOrWhiteSpace(RolDto.Name))
+            if (string.IsNullOrWhiteSpace(RolDto.Description))
             {
-                _logger.LogWarning("Se intentó crear/actualizar un rol con Name vacío");
-                throw new Utilities.Exceptions.ValidationException("Name", "El Name del rol es obligatorio");
+                _logger.LogWarning("Se intentó crear/actualizar un rol con Descripcion vacío");
+                throw new Utilities.Exceptions.ValidationException("Descripcion", "El Descripcion del rol es obligatorio");
             }
         }
 

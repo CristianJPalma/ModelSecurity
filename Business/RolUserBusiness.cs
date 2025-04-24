@@ -103,8 +103,8 @@ namespace Business
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleRolId}", RolUserDto.RolId <= 0);
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleUserId}", RolUserDto.UserId <= 0);
+                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleRolId}", RolUserDto.RolId >= 0);
+                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleUserId}", RolUserDto.UserId >= 0);
                 throw new ExternalServiceException("Base de datos", "Error al crear el rolUser", ex);
             }
         }

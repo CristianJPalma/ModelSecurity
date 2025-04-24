@@ -12,34 +12,22 @@ namespace Business
     public class UserBusiness
     {
         private readonly UserData _userData;
+        private readonly PersonData _personData; // 🔍 Inyectamos PersonData
         private readonly ILogger<UserBusiness> _logger;
 
-        public UserBusiness(UserData userData, ILogger<UserBusiness> logger)
+        public UserBusiness(UserData userData, PersonData personData, ILogger<UserBusiness> logger)
         {
             _userData = userData;
+            _personData = personData;
             _logger = logger;
         }
 
-        // Método para obtener todos las personas como DTOs
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
             try
             {
                 var users = await _userData.GetAllAsync();
-                var usersDTO = new List<UserDto>();
-
-                foreach (var user in users)
-                {
-                    usersDTO.Add(new UserDto
-                    {
-                        Id = user.Id,
-                        UserName = user.UserName,
-                        Code = user.Code,
-                        Active = user.Active
-                    });
-                }
-
-                return usersDTO;
+                return MapToDtoList(users);
             }
             catch (Exception ex)
             {
@@ -48,13 +36,12 @@ namespace Business
             }
         }
 
-        // Método para obtener un usuario por ID como DTO
         public async Task<UserDto> GetUserByIdAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó obtener un usuario con ID inválido: {UserId}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID del usuario debe ser mayor que cero");
+                _logger.LogWarning("ID inválido: {UserId}", id);
+                throw new ValidationException("id", "El ID del usuario debe ser mayor que cero");
             }
 
             try
@@ -66,13 +53,7 @@ namespace Business
                     throw new EntityNotFoundException("User", id);
                 }
 
-                return new UserDto
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Code = user.Code,
-                    Active = user.Active
-                };
+                return MapToDto(user);
             }
             catch (Exception ex)
             {
@@ -81,84 +62,103 @@ namespace Business
             }
         }
 
-        // Método para crear un usuario desde un DTO
-        public async Task<UserDto> CreateUserAsync(UserDto UserDto)
+        public async Task<UserDto> CreateUserAsync(UserDto dto)
         {
             try
             {
-                ValidateUser(UserDto);
+                ValidateUser(dto);
 
-                var user = new User
+                // 🔍 Validación de PersonId antes de guardar
+                var person = await _personData.GetByIdAsync(dto.PersonId);
+                if (person == null)
                 {
-                    UserName = UserDto.UserName,
-                    Code = UserDto.Code,
-                    Active = UserDto.Active
-                };
-                user.CreateAt = DateTime.Now;
-                var userCreado = await _userData.CreateAsync(user);
+                    _logger.LogWarning("No se encontró la persona con ID: {PersonId}", dto.PersonId);
+                    throw new ValidationException("PersonId", "No existe una persona con el ID proporcionado");
+                }
 
-                return new UserDto
-                {
-                    Id = userCreado.Id,
-                    UserName = userCreado.UserName,
-                    Code = userCreado.Code,
-                    Active = userCreado.Active
-                };
+                var entity = MapToEntity(dto);
+                entity.CreateAt = DateTime.Now;
+
+                var created = await _userData.CreateAsync(entity);
+
+                return MapToDto(created);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo usuario: {UserNombre}", UserDto?.UserName ?? "null");
+                _logger.LogError(ex, "Error al crear nuevo usuario: {UserName}", dto?.UserName ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear el usuario", ex);
             }
         }
 
-        // Método para validar el DTO
-        private void ValidateUser(UserDto UserDto)
-        {
-            if (UserDto == null)
-            {
-                throw new Utilities.Exceptions.ValidationException("El objeto User no puede ser nulo");
-            }
 
-            if (string.IsNullOrWhiteSpace(UserDto.UserName))
+        public async Task DeleteUserAsync(int id)
+        {
+            if (id <= 0)
+                throw new ValidationException("id", "El ID del usuario debe ser mayor que cero");
+
+            try
             {
-                _logger.LogWarning("Se intentó crear/actualizar un usuario con UserName vacío");
-                throw new Utilities.Exceptions.ValidationException("UserName", "El UserName del usuario es obligatorio");
+                var existing = await _userData.GetByIdAsync(id);
+                if (existing == null)
+                {
+                    _logger.LogInformation("Usuario no encontrado para eliminar con ID: {Id}", id);
+                    throw new EntityNotFoundException("User", id);
+                }
+
+                await _userData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar usuario con ID: {Id}", id);
+                throw new ExternalServiceException("Base de datos", "Error al eliminar el usuario", ex);
             }
         }
-        // Método para mapear de User a UserDTO
-        private UserDto MapToDTO(User User)
+
+        private void ValidateUser(UserDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("El objeto User no puede ser nulo");
+
+            if (string.IsNullOrWhiteSpace(dto.UserName))
+            {
+                _logger.LogWarning("UserName vacío al crear/actualizar usuario");
+                throw new ValidationException("UserName", "El UserName del usuario es obligatorio");
+            }
+
+            if (string.IsNullOrWhiteSpace(dto.Code))
+            {
+                _logger.LogWarning("Code vacío al crear/actualizar usuario");
+                throw new ValidationException("Code", "El código del usuario es obligatorio");
+            }
+        }
+
+        private UserDto MapToDto(User user)
         {
             return new UserDto
             {
-                Id = User.Id,
-                UserName = User.UserName,
-                Code = User.Code,
-                Active = User.Active
+                Id = user.Id,
+                UserName = user.UserName,
+                Code = user.Code,
+                Active = user.Active,
+                PersonId = user.PersonId // Agregado para reflejarlo también en el DTO
             };
         }
 
-        //Metodo para mapear de UserDTO a User
-        private User MapToEntity(UserDto UserDTO)
+        private User MapToEntity(UserDto dto)
         {
             return new User
             {
-                Id = UserDTO.Id,
-                UserName = UserDTO.UserName,
-                Code = UserDTO.Code,
-                Active = UserDTO.Active
-
+                Id = dto.Id,
+                UserName = dto.UserName,
+                Code = dto.Code,
+                Active = dto.Active,
+                PersonId = dto.PersonId // 🔍 Asegura que se asigne correctamente
             };
         }
-        // Método para mapear una lista de User a una lista de UserDTO
-        private IEnumerable<UserDto> MapToDTOList(IEnumerable<User> Users)
+
+        private IEnumerable<UserDto> MapToDtoList(IEnumerable<User> users)
         {
-            var UsersDTO = new List<UserDto>();
-            foreach (var User in Users)
-            {
-                UsersDTO.Add(MapToDTO(User));
-            }
-            return UsersDTO;
+            return users.Select(MapToDto).ToList();
         }
     }
 }
