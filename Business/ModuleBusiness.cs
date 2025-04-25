@@ -7,7 +7,7 @@ using Utilities.Exceptions;
 namespace Business
 {
     /// <summary>
-    /// Clase de negocio encargada de la lógica relacionada con los modulos del sistema.
+    /// Clase de negocio encargada de la lógica relacionada con los módulos del sistema.
     /// </summary>
     public class ModuleBusiness
     {
@@ -20,40 +20,28 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todos los modulos como DTOs
+        // Método para obtener todos los módulos como DTOs
         public async Task<IEnumerable<ModuleDto>> GetAllModuleAsync()
         {
             try
             {
                 var modules = await _moduleData.GetAllAsync();
-                var modulesDTO = new List<ModuleDto>();
-
-                foreach (var module in modules)
-                {
-                    modulesDTO.Add(new ModuleDto
-                    {
-                        Id = module.Id,
-                        Name = module.Name,
-                        Active = module.Active 
-                    });
-                }
-
-                return modulesDTO;
+                return MapToDtoList(modules);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener todos los modulos");
-                throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de modulos", ex);
+                _logger.LogError(ex, "Error al obtener todos los módulos");
+                throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de módulos", ex);
             }
         }
 
-        // Método para obtener un modulo por ID como DTO
+        // Método para obtener un módulo por ID como DTO
         public async Task<ModuleDto> GetModuleByIdAsync(int id)
         {
             if (id <= 0)
             {
-                _logger.LogWarning("Se intentó obtener un modulo con ID inválido: {ModuleId}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID del modulo debe ser mayor que cero");
+                _logger.LogWarning("Se intentó obtener un módulo con ID inválido: {ModuleId}", id);
+                throw new ValidationException("id", "El ID del módulo debe ser mayor que cero");
             }
 
             try
@@ -61,50 +49,112 @@ namespace Business
                 var module = await _moduleData.GetByIdAsync(id);
                 if (module == null)
                 {
-                    _logger.LogInformation("No se encontró ningún modulo con ID: {ModuleId}", id);
+                    _logger.LogInformation("No se encontró ningún módulo con ID: {ModuleId}", id);
                     throw new EntityNotFoundException("Modulo", id);
                 }
 
-                return new ModuleDto
-                {
-                    Id = module.Id,
-                    Name = module.Name,
-                    Active = module.Active
-                };
+                return MapToDto(module);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener el modulo con ID: {ModuleId}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al recuperar el modulo con ID {id}", ex);
+                _logger.LogError(ex, "Error al obtener el módulo con ID: {ModuleId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al recuperar el módulo con ID {id}", ex);
             }
         }
 
-        // Método para crear un modulo desde un DTO
+        // Método para crear un módulo desde un DTO
         public async Task<ModuleDto> CreateModuleAsync(ModuleDto moduleDto)
         {
             try
             {
                 ValidateModule(moduleDto);
 
-                var module = new Module
-                {
-                    Name = moduleDto.Name,
-                    Active = moduleDto.Active // Si existe en la entidad
-                };
-                module.CreateAt = DateTime.Now;
-                var moduleCreado = await _moduleData.CreateAsync(module);
+                var module = MapToEntity(moduleDto);
+                 module.CreateAt=DateTime.Now;
+                var createdModule = await _moduleData.CreateAsync(module);
 
-                return new ModuleDto
-                {
-                    Id = moduleCreado.Id,
-                    Name = moduleCreado.Name,
-                    Active = moduleCreado.Active // Si existe en la entidad
-                };
+                return MapToDto(createdModule);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo modulo: {ModuleNombre}", moduleDto?.Name ?? "null");
-                throw new ExternalServiceException("Base de datos", "Error al crear el modulo", ex);
+                _logger.LogError(ex, "Error al crear nuevo módulo: {ModuleNombre}", moduleDto?.Name ?? "null");
+                throw new ExternalServiceException("Base de datos", "Error al crear el módulo", ex);
+            }
+        }
+
+        // Método para actualizar un módulo existente
+        public async Task<ModuleDto> UpdateModuleAsync(ModuleDto moduleDto)
+        {
+            try
+            {
+                if (moduleDto == null || moduleDto.Id <= 0)
+                {
+                    throw new ValidationException("Id", "El ID del módulo debe ser mayor que cero");
+                }
+
+                ValidateModule(moduleDto);
+
+                var existingModule = await _moduleData.GetByIdAsync(moduleDto.Id);
+                if (existingModule == null)
+                {
+                    _logger.LogInformation("No se encontró módulo para actualizar con ID: {ModuleId}", moduleDto.Id);
+                    throw new EntityNotFoundException("Modulo", moduleDto.Id);
+                }
+
+                var updatedModule = await _moduleData.UpdateAsync(MapToEntity(moduleDto));
+                return MapToDto(updatedModule);
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (EntityNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar módulo con ID: {ModuleId}", moduleDto?.Id ?? 0);
+                throw new ExternalServiceException("Base de datos", "Error al actualizar el módulo", ex);
+            }
+        }
+
+        private ModuleDto MapToDto(bool updatedModule)
+        {
+            throw new NotImplementedException();
+        }
+
+        // Método para eliminar un módulo por su ID
+        public async Task DeleteModuleAsync(int id)
+        {
+            if (id <= 0)
+            {
+                throw new ValidationException("id", "El ID del módulo debe ser mayor que cero");
+            }
+
+            try
+            {
+                var existingModule = await _moduleData.GetByIdAsync(id);
+                if (existingModule == null)
+                {
+                    _logger.LogInformation("No se encontró módulo para eliminar con ID: {ModuleId}", id);
+                    throw new EntityNotFoundException("Modulo", id);
+                }
+
+                await _moduleData.DeleteAsync(id);
+            }
+            catch (ValidationException)
+            {
+                throw;
+            }
+            catch (EntityNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar módulo con ID: {ModuleId}", id);
+                throw new ExternalServiceException("Base de datos", "Error al eliminar el módulo", ex);
             }
         }
 
@@ -113,46 +163,47 @@ namespace Business
         {
             if (moduleDto == null)
             {
-                throw new Utilities.Exceptions.ValidationException("El objeto modulo no puede ser nulo");
+                throw new ValidationException("El objeto módulo no puede ser nulo");
             }
 
             if (string.IsNullOrWhiteSpace(moduleDto.Name))
             {
-                _logger.LogWarning("Se intentó crear/actualizar un modulo con Name vacío");
-                throw new Utilities.Exceptions.ValidationException("Name", "El Name del modulo es obligatorio");
+                _logger.LogWarning("Se intentó crear/actualizar un módulo con Name vacío");
+                throw new ValidationException("Name", "El Name del módulo es obligatorio");
             }
         }
-        // Método para mapear de Module a ModuleDTO
-        private ModuleDto MapToDTO(Module Module)
+
+        // Método para mapear un entity a DTO
+        private ModuleDto MapToDto(Module module)
         {
             return new ModuleDto
             {
-                Id = Module.Id,
-                Name = Module.Name,
-                Active = Module.Active
+                Id = module.Id,
+                Name = module.Name,
+                Active = module.Active
             };
         }
 
-        //Metodo para mapear de ModuleDTO a Module
-        private Module MapToEntity(ModuleDto ModuleDTO)
+        // Método para mapear un DTO a entity
+        private Module MapToEntity(ModuleDto dto)
         {
             return new Module
             {
-                Id = ModuleDTO.Id,
-                Name = ModuleDTO.Name,
-                Active = ModuleDTO.Active
-
+                Id = dto.Id,
+                Name = dto.Name,
+                Active = dto.Active
             };
         }
-        // Método para mapear una lista de Module a una lista de ModuleDTO
-        private IEnumerable<ModuleDto> MapToDTOList(IEnumerable<Module> Modules)
+
+        // Método para mapear una lista de entidades a DTOs
+        private IEnumerable<ModuleDto> MapToDtoList(IEnumerable<Module> modules)
         {
-            var ModulesDTO = new List<ModuleDto>();
-            foreach (var Module in Modules)
+            var moduleDtos = new List<ModuleDto>();
+            foreach (var module in modules)
             {
-                ModulesDTO.Add(MapToDTO(Module));
+                moduleDtos.Add(MapToDto(module));
             }
-            return ModulesDTO;
+            return moduleDtos;
         }
     }
 }

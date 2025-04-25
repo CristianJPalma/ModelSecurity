@@ -20,25 +20,12 @@ namespace Business
             _logger = logger;
         }
 
-        // Método para obtener todos los formModules como DTOs
         public async Task<IEnumerable<FormModuleDto>> GetAllFormModulesAsync()
         {
             try
             {
                 var formModules = await _formModuleData.GetAllAsync();
-                var formModulesDtos = new List<FormModuleDto>();
-
-                foreach (var formModule in formModules)
-                {
-                    formModulesDtos.Add(new FormModuleDto
-                    {
-                        Id = formModule.Id,
-                        ModuleId = formModule.ModuleId,
-                        FormId = formModule.FormId
-                    });
-                }
-
-                return formModulesDtos;
+                return MapToDtoList(formModules);
             }
             catch (Exception ex)
             {
@@ -47,13 +34,12 @@ namespace Business
             }
         }
 
-        // Método para obtener un formModule por ID como DTO
         public async Task<FormModuleDto> GetFormModuleByIdAsync(int id)
         {
             if (id <= 0)
             {
                 _logger.LogWarning("Se intentó obtener un formModule con ID inválido: {FormModuleId}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID del formModule debe ser mayor que cero");
+                throw new ValidationException("id", "El ID del formModule debe ser mayor que cero");
             }
 
             try
@@ -65,12 +51,7 @@ namespace Business
                     throw new EntityNotFoundException("FormModule", id);
                 }
 
-                return new FormModuleDto
-                {
-                    Id = formModule.Id,
-                    ModuleId = formModule.ModuleId,
-                    FormId = formModule.FormId
-                };
+                return MapToDto(formModule);
             }
             catch (Exception ex)
             {
@@ -79,86 +60,121 @@ namespace Business
             }
         }
 
-        // Método para crear un formModule desde un DTO
         public async Task<FormModuleDto> CreateFormModuleAsync(FormModuleDto formModuleDto)
         {
             try
             {
                 ValidateFormModule(formModuleDto);
 
-                var formModule = new FormModule
-                {
-                    FormId = formModuleDto.FormId,
-                    ModuleId = formModuleDto.ModuleId // Si existe en la entidad
-                };
+                var formModule = MapToEntity(formModuleDto);
+                var created = await _formModuleData.CreateAsync(formModule);
 
-                var formModuleCreado = await _formModuleData.CreateAsync(formModule);
-
-                return new FormModuleDto
-                {
-                    Id = formModuleCreado.Id,
-                    FormId = formModuleCreado.FormId,
-                    ModuleId = formModuleCreado.ModuleId
-                };
+                return MapToDto(created);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleFormId}" ,formModuleDto.FormId <= 0);
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleModuleId}", formModuleDto.ModuleId <= 0);
+                _logger.LogError(ex, "Error al crear nuevo formModule");
                 throw new ExternalServiceException("Base de datos", "Error al crear el formModule", ex);
             }
         }
 
-        // Método para validar el DTO
+        public async Task UpdateFormModuleAsync(FormModuleDto formModuleDto)
+        {
+            if (formModuleDto == null || formModuleDto.Id <= 0)
+                throw new ValidationException("Id", "El formulario a actualizar debe tener un ID válido");
+
+            ValidateFormModule(formModuleDto);
+
+            try
+            {
+                var existing = await _formModuleData.GetByIdAsync(formModuleDto.Id);
+                if (existing == null)
+                    throw new EntityNotFoundException("FormModule", formModuleDto.Id);
+
+                existing.FormId = formModuleDto.FormId;
+                existing.ModuleId = formModuleDto.ModuleId;
+
+                var result = await _formModuleData.UpdateAsync(existing);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "Error al actualizar el formModule");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar formulario con ID: {FormId}", formModuleDto.Id);
+                throw;
+            }
+        }
+
+        private FormModuleDto MapToDto(bool updated)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteFormModuleAsync(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    throw new ValidationException("id", "El ID del formModule debe ser mayor que cero");
+                }
+
+                var existing = await _formModuleData.GetByIdAsync(id);
+                if (existing == null)
+                {
+                    throw new EntityNotFoundException("FormModule", id);
+                }
+
+                await _formModuleData.DeleteAsync(id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar formModule con ID: {FormModuleId}", id);
+                throw new ExternalServiceException("Base de datos", $"Error al eliminar el formModule con ID {id}", ex);
+            }
+        }
+
         private void ValidateFormModule(FormModuleDto formModuleDto)
         {
             if (formModuleDto == null)
             {
-                throw new Utilities.Exceptions.ValidationException("El objeto formModule no puede ser nulo");
+                throw new ValidationException("El objeto formModule no puede ser nulo");
             }
 
             if (formModuleDto.FormId <= 0)
             {
-                _logger.LogWarning("Se intentó crear/actualizar un formModule con FormId vacío");
-                throw new Utilities.Exceptions.ValidationException("FormId", "El FormId del formModule es obligatorio");
+                throw new ValidationException("FormId", "El FormId del formModule es obligatorio");
             }
+
             if (formModuleDto.ModuleId <= 0)
             {
-                _logger.LogWarning("Se intentó crear/actualizar un formModule con ModuleId vacío");
-                throw new Utilities.Exceptions.ValidationException("ModuleId", "El ModuleId del formModule es obligatorio");
+                throw new ValidationException("ModuleId", "El ModuleId del formModule es obligatorio");
             }
         }
-        // Método para mapear de FormModule a FormModuleDTO
-        private FormModuleDto MapToDTO(FormModule formModule)
+
+        private FormModuleDto MapToDto(FormModule formModule)
         {
             return new FormModuleDto
             {
                 Id = formModule.Id,
-                FormId = formModule.FormId,
-                ModuleId = formModule.ModuleId
+                ModuleId = formModule.ModuleId,
+                FormId = formModule.FormId
             };
         }
 
-        //Metodo para mapear de FormModuleDTO a FormModule
-        private FormModule MapToEntity(FormModuleDto formModuleDTO)
+        private FormModule MapToEntity(FormModuleDto dto)
         {
             return new FormModule
             {
-                Id = formModuleDTO.Id,
-                FormId = formModuleDTO.FormId,
-                ModuleId = formModuleDTO.ModuleId
-
+                Id = dto.Id,
+                ModuleId = dto.ModuleId,
+                FormId = dto.FormId
             };
         }
-        // Método para mapear una lista de FormModule a una lista de FormModuleDTO
-        private IEnumerable<FormModuleDto> MapToDTOList(IEnumerable<FormModule> formModules)
+
+        private IEnumerable<FormModuleDto> MapToDtoList(IEnumerable<FormModule> entities)
         {
-            var formModulesDTO = new List<FormModuleDto>();
-            foreach (var formModule in formModules)
-            {
-                formModulesDTO.Add(MapToDTO(formModule));
-            }
-            return formModulesDTO;
+            return entities.Select(MapToDto).ToList();
         }
     }
 }

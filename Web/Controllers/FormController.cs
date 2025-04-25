@@ -131,34 +131,34 @@ namespace Web.Controllers
                 return StatusCode(500, new { message = ex.Message });
             }
         }
-
+        ///<summary>
         /// <summary>
-/// Desactiva un formulario (eliminación lógica)
-/// </summary>
-/// <param name="id">ID del formulario a desactivar</param>
-/// <returns>NoContent si fue exitoso</returns>
-[HttpPatch("{id}/disable")]
-[ProducesResponseType(204)]
-[ProducesResponseType(404)]
-[ProducesResponseType(500)]
-public async Task<IActionResult> DisableForm(int id)
-{
-    try
-    {
-        await _FormBusiness.DisableFormAsync(id);
-        return NoContent();
-    }
-    catch (EntityNotFoundException ex)
-    {
-        _logger.LogInformation(ex, "Formulario no encontrado para desactivación con ID: {FormId}", id);
-        return NotFound(new { message = ex.Message });
-    }
-    catch (ExternalServiceException ex)
-    {
-        _logger.LogError(ex, "Error al desactivar formulario con ID: {FormId}", id);
-        return StatusCode(500, new { message = ex.Message });
-    }
-}
+        /// Desactiva un formulario (eliminación lógica)
+        /// </summary>
+        /// <param name="id">ID del formulario a desactivar</param>
+        /// <returns>NoContent si fue exitoso</returns>
+        [HttpDelete("{id}/disable")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DisableForm(int id)
+        {
+            try
+            {
+                await _FormBusiness.DisableFormAsync(id);
+                return NoContent();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Formulario no encontrado para desactivación con ID: {FormId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al desactivar formulario con ID: {FormId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
 
         /// <summary>
         /// Elimina un permiso por su ID
