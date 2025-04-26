@@ -9,7 +9,7 @@ using Utilities.Exceptions;
 namespace Web.Controllers
 {
     /// <summary>
-    /// Controlador para la gestión de permisos en el sistema
+    /// Controlador para la gestión de formularios en el sistema
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -37,7 +37,7 @@ namespace Web.Controllers
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al obtener permisos");
+                _logger.LogError(ex, "Error al obtener formularios");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
@@ -56,17 +56,17 @@ namespace Web.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogWarning(ex, "Validación fallida para el permiso con ID: {FormId}", id);
+                _logger.LogWarning(ex, "Validación fallida para el formulario con ID: {FormId}", id);
                 return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "Permiso no encontrado con ID: {FormId}", id);
+                _logger.LogInformation(ex, "formulario no encontrado con ID: {FormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al obtener permiso con ID: {FormId}", id);
+                _logger.LogError(ex, "Error al obtener formulario con ID: {FormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }
@@ -84,21 +84,21 @@ namespace Web.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogWarning(ex, "Validación fallida al crear permiso");
+                _logger.LogWarning(ex, "Validación fallida al crear formulario");
                 return BadRequest(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al crear permiso");
+                _logger.LogError(ex, "Error al crear formulario");
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
         /// <summary>
-        /// Actualiza un permiso existente
+        /// Actualiza un formulario existente
         /// </summary>
-        /// <param name="id">ID del permiso</param>
-        /// <param name="FormDto">Datos actualizados del permiso</param>
+        /// <param name="id">ID del formulario</param>
+        /// <param name="FormDto">Datos actualizados del formulario</param>
         /// <returns>Resultado de la operación</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
@@ -108,7 +108,7 @@ namespace Web.Controllers
         public async Task<IActionResult> UpdateForm(int id, [FromBody] FormDto FormDto)
         {
             if (id != FormDto.Id)
-                return BadRequest(new { message = "El ID del permiso no coincide con el del objeto." });
+                return BadRequest(new { message = "El ID del formulario no coincide con el del objeto." });
 
             try
             {
@@ -117,20 +117,66 @@ namespace Web.Controllers
             }
             catch (ValidationException ex)
             {
-                _logger.LogWarning(ex, "Validación fallida al actualizar permiso con ID: {FormId}", id);
+                _logger.LogWarning(ex, "Validación fallida al actualizar formulario con ID: {FormId}", id);
                 return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "Permiso no encontrado con ID: {FormId}", id);
+                _logger.LogInformation(ex, "formulario no encontrado con ID: {FormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al actualizar permiso con ID: {FormId}", id);
+                _logger.LogError(ex, "Error al actualizar formulario con ID: {FormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+
+        /// <summary>
+        /// Actualiza parcialmente un formulario existente
+        /// </summary>
+        /// <param name="id">ID del formulario</param>
+        /// <param name="FormDto">Datos actualizados del formulario (parciales)</param>
+        /// <returns>Resultado de la operación</returns>
+        [HttpPatch("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PatchForm(int id, [FromBody] FormDto FormDto)
+        {
+            if (id != FormDto.Id)
+                return BadRequest(new { message = "El ID del formulario no coincide con el del objeto." });
+
+            try
+            {
+                // Llamamos al método de negocio para actualizar parcialmente el formulario
+                await _FormBusiness.PatchFormAsync(FormDto);
+                return NoContent(); // 204: No Content, éxito pero sin contenido a devolver
+            }
+            catch (ValidationException ex)
+            {
+                // Si hay algún error en la validación
+                _logger.LogWarning(ex, "Validación fallida al actualizar parcialmente el formulario con ID: {FormId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                // Si no se encuentra el formulario
+                _logger.LogInformation(ex, "Formulario no encontrado con ID: {FormId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                // Si ocurre algún error al interactuar con el servicio de base de datos o externo
+                _logger.LogError(ex, "Error al actualizar parcialmente el formulario con ID: {FormId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+
+
         ///<summary>
         /// <summary>
         /// Desactiva un formulario (eliminación lógica)
@@ -161,9 +207,9 @@ namespace Web.Controllers
         }
 
         /// <summary>
-        /// Elimina un permiso por su ID
+        /// Elimina un formulario por su ID
         /// </summary>
-        /// <param name="id">ID del permiso a eliminar</param>
+        /// <param name="id">ID del formulario a eliminar</param>
         /// <returns>Resultado de la operación</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(204)]
@@ -178,12 +224,12 @@ namespace Web.Controllers
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "Permiso no encontrado para eliminación con ID: {FormId}", id);
+                _logger.LogInformation(ex, "formulario no encontrado para eliminación con ID: {FormId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al eliminar permiso con ID: {FormId}", id);
+                _logger.LogError(ex, "Error al eliminar formulario con ID: {FormId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }

@@ -107,33 +107,83 @@ namespace Business
                 throw;
             }
         }
-
         /// <summary>
-/// Realiza una eliminación lógica del formulario.
-/// </summary>
-/// <param name="id">ID del formulario</param>
-public async Task DisableFormAsync(int id)
-{
-    if (id <= 0)
-        throw new ValidationException("id", "El ID del formulario debe ser mayor que cero");
+        /// Actualiza parcialmente un formulario mediante un diccionario de campos.
+        /// </summary>
+        /// <param name="id">ID del formulario a actualizar</param>
+        /// <param name="updatedFields">Diccionario con los nombres de los campos y sus nuevos valores</param>
+        /// <returns>Task</returns>
+        public async Task PatchFormAsync(FormDto formDto)
+        {
+    if (formDto == null || formDto.Id <= 0)
+        throw new ValidationException("Id", "El formulario a actualizar debe tener un ID válido");
+
+    // Validaciones generales si es necesario (puedes dejarlo o adaptarlo según tus reglas)
+    ValidateForm(formDto);
 
     try
     {
-        var existing = await _formData.GetByIdAsync(id);
+        // Buscar el formulario existente por su ID
+        var existing = await _formData.GetByIdAsync(formDto.Id);
         if (existing == null)
-            throw new EntityNotFoundException("Form", id);
+            throw new EntityNotFoundException("Form", formDto.Id);
 
-        var result = await _formData.DisableAsync(id);
+        // Actualizar solo los campos que se pasen en el DTO (FormDto)
+        // En un PATCH, no se espera que todos los campos estén presentes
+        if (!string.IsNullOrEmpty(formDto.Name))
+            existing.Name = formDto.Name;
+
+        if (!string.IsNullOrEmpty(formDto.Code))
+            existing.Code = formDto.Code;
+
+        if (formDto.Active != true)
+            existing.Active = formDto.Active;
+
+
+        // Intentar actualizar en la base de datos
+        var result = await _formData.UpdateAsync(existing);
         if (!result)
-            throw new ExternalServiceException("Base de datos", "No se pudo desactivar el formulario");
+            throw new ExternalServiceException("Base de datos", "Error al actualizar el formulario");
     }
     catch (Exception ex)
     {
-        _logger.LogError(ex, "Error al desactivar formulario con ID: {FormId}", id);
+        // Manejo de errores
+        _logger.LogError(ex, "Error al actualizar parcialmente el formulario con ID: {FormId}", formDto.Id);
         throw;
     }
 }
 
+
+        /// <summary>
+        /// Realiza una eliminación lógica del formulario.
+        /// </summary>
+        /// <param name="id">ID del formulario</param>
+        public async Task DisableFormAsync(int id)
+        {
+            if (id <= 0)
+                throw new ValidationException("id", "El ID del formulario debe ser mayor que cero");
+
+            try
+            {
+                var existing = await _formData.GetByIdAsync(id);
+                if (existing == null)
+                    throw new EntityNotFoundException("Form", id);
+
+                var result = await _formData.DisableAsync(id);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "No se pudo desactivar el formulario");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al desactivar formulario con ID: {FormId}", id);
+                throw;
+            }
+    }
+
+        /// <summary>
+        /// Realiza una eliminación total del formulario.
+        /// </summary>
+        /// <param name="id">ID del formulario</param>
         public async Task DeleteFormAsync(int id)
         {
             if (id <= 0)

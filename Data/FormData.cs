@@ -82,30 +82,76 @@ namespace Data
                 return false;
             }
         }
-    /// <summary>
-    /// Realiza una eliminación lógica del formulario, marcándolo como inactivo.
-    /// </summary>
-    /// <param name="id">ID del formulario a desactivar</param>
-    /// <returns>True si se desactivó correctamente, false si no se encontró</returns>
-    public async Task<bool> DisableAsync(int id)
-    {
-        try
-        {
-            var form = await _context.Set<Form>().FindAsync(id);
-            if (form == null)
-                return false;
 
-            form.Active = false;
-            _context.Set<Form>().Update(form);
-            await _context.SaveChangesAsync();
-            return true;
-        }
-        catch (Exception ex)
+        /// <summary>
+        /// Actualiza parcialmente los campos de un formulario existente.
+        /// </summary>
+        /// <param name="form">Diccionario con los nombres de los campos y sus nuevos valores</param>
+        /// <returns>True si la actualización fue exitosa, false en caso contrario</returns>
+public async Task<bool> PatchAsync(int formId, Form form)
+{
+    try
+    {
+        // Buscar el formulario existente por su ID
+        var existingForm = await _context.Set<Form>().FindAsync(formId);
+        
+        // Si no se encuentra el formulario, retornar false
+        if (existingForm == null)
         {
-            _logger.LogError(ex, "Error al realizar eliminación lógica del formulario con ID {FormId}", id);
+            _logger.LogError($"Formulario con ID {formId} no encontrado.");
             return false;
         }
+
+        // Actualizar solo los campos que han sido modificados
+        if (form.Name != null)
+            existingForm.Name = form.Name;
+
+        if (form.Code != null)
+            existingForm.Code = form.Code;
+            
+        if (form.Active != true)
+             existingForm.Active = form.Active;
+        // Aquí puedes agregar más campos según lo que necesites actualizar
+
+        // Guardar los cambios
+        await _context.SaveChangesAsync();
+
+        return true;
     }
+    catch (Exception ex)
+    {
+        _logger.LogError($"Error al actualizar el formulario: {ex.Message}");
+        return false;
+    }
+}
+
+        
+
+        
+        /// <summary>
+        /// Realiza una eliminación lógica del formulario, marcándolo como inactivo.
+        /// </summary>
+        /// <param name="id">ID del formulario a desactivar</param>
+        /// <returns>True si se desactivó correctamente, false si no se encontró</returns>
+        public async Task<bool> DisableAsync(int id)
+        {
+            try
+            {
+                var form = await _context.Set<Form>().FindAsync(id);
+                if (form == null)
+                    return false;
+
+                form.Active = false;
+                _context.Set<Form>().Update(form); 
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al realizar eliminación lógica del formulario con ID {FormId}", id);
+                return false;
+            }
+        }
 
         ///<summary>
         ///Elimina un formulario de la base de datos
