@@ -85,6 +85,7 @@ namespace Data
 
         /// <summary>
         /// Actualiza parcialmente los campos de un formulario existente.
+        /// path
         /// </summary>
         /// <param name="form">Diccionario con los nombres de los campos y sus nuevos valores</param>
         /// <returns>True si la actualización fue exitosa, false en caso contrario</returns>
@@ -109,7 +110,7 @@ public async Task<bool> PatchAsync(int formId, Form form)
         if (form.Code != null)
             existingForm.Code = form.Code;
             
-        if (form.Active != true)
+        if (form.Active != null)
              existingForm.Active = form.Active;
         // Aquí puedes agregar más campos según lo que necesites actualizar
 

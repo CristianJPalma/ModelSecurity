@@ -118,8 +118,7 @@ namespace Business
     if (formDto == null || formDto.Id <= 0)
         throw new ValidationException("Id", "El formulario a actualizar debe tener un ID válido");
 
-    // Validaciones generales si es necesario (puedes dejarlo o adaptarlo según tus reglas)
-    ValidateForm(formDto);
+
 
     try
     {
@@ -211,8 +210,8 @@ namespace Business
             if (formDto == null)
                 throw new ValidationException("formDto", "El objeto formulario no puede ser nulo");
 
-            if (string.IsNullOrWhiteSpace(formDto.Name))
-                throw new ValidationException("Name", "El Name del formulario es obligatorio");
+            if (string.IsNullOrWhiteSpace(formDto.Code))
+                throw new ValidationException("Code", "El Code del formulario es obligatorio");
         }
 
         private FormDto MapToDto(Form form)
