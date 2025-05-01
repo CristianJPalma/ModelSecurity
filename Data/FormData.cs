@@ -89,42 +89,41 @@ namespace Data
         /// </summary>
         /// <param name="form">Diccionario con los nombres de los campos y sus nuevos valores</param>
         /// <returns>True si la actualización fue exitosa, false en caso contrario</returns>
-public async Task<bool> PatchAsync(int formId, Form form)
-{
-    try
-    {
-        // Buscar el formulario existente por su ID
-        var existingForm = await _context.Set<Form>().FindAsync(formId);
-        
-        // Si no se encuentra el formulario, retornar false
-        if (existingForm == null)
+        public async Task<bool> PatchAsync(int formId, Form form)
         {
-            _logger.LogError($"Formulario con ID {formId} no encontrado.");
-            return false;
+            try
+            {
+                // Buscar el formulario existente por su ID
+                var existingForm = await _context.Set<Form>().FindAsync(formId);
+                
+                // Si no se encuentra el formulario, retornar false
+                if (existingForm == null)
+                {
+                    _logger.LogError($"Formulario con ID {formId} no encontrado.");
+                    return false;
+                }
+
+                // Actualizar solo los campos que han sido modificados
+                if (form.Name != null)
+                    existingForm.Name = form.Name;
+
+                if (form.Code != null)
+                    existingForm.Code = form.Code;
+                    
+                if (form.Active != null)
+                    existingForm.Active = form.Active;
+
+                // Guardar los cambios
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al actualizar el formulario: {ex.Message}");
+                return false;
+            }
         }
-
-        // Actualizar solo los campos que han sido modificados
-        if (form.Name != null)
-            existingForm.Name = form.Name;
-
-        if (form.Code != null)
-            existingForm.Code = form.Code;
-            
-        if (form.Active != null)
-             existingForm.Active = form.Active;
-        // Aquí puedes agregar más campos según lo que necesites actualizar
-
-        // Guardar los cambios
-        await _context.SaveChangesAsync();
-
-        return true;
-    }
-    catch (Exception ex)
-    {
-        _logger.LogError($"Error al actualizar el formulario: {ex.Message}");
-        return false;
-    }
-}
 
         
 

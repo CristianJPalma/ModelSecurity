@@ -26,7 +26,7 @@ namespace Business
             try
             {
                 var modules = await _moduleData.GetAllAsync();
-                return MapToDtoList(modules);
+                return modules.Select(MapToDto);
             }
             catch (Exception ex)
             {
@@ -68,93 +68,141 @@ namespace Business
             try
             {
                 ValidateModule(moduleDto);
+                var module = new Module
+                {
+                    Name = moduleDto.Name,
+                    Active = moduleDto.Active
+                };
 
-                var module = MapToEntity(moduleDto);
+                
                  module.CreateAt=DateTime.Now;
-                var createdModule = await _moduleData.CreateAsync(module);
 
-                return MapToDto(createdModule);
+                var moduleCreado = await _moduleData.CreateAsync(module);
+                return MapToDto(moduleCreado);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo módulo: {ModuleNombre}", moduleDto?.Name ?? "null");
-                throw new ExternalServiceException("Base de datos", "Error al crear el módulo", ex);
+                _logger.LogError(ex, "Error al crear modulo: {ModuleNombre}", moduleDto?.Name ?? "null");
+                throw new ExternalServiceException("Base de datos", "Error al crear el modulo", ex);
             }
         }
 
         // Método para actualizar un módulo existente
-        public async Task<ModuleDto> UpdateModuleAsync(ModuleDto moduleDto)
+        public async Task UpdateModuleAsync(ModuleDto moduleDto)
         {
+            if (moduleDto == null || moduleDto.Id <= 0)
+                throw new ValidationException("Id", "El modulo a actualizar debe tener un ID válido");
+
+            ValidateModule(moduleDto);
+
             try
             {
-                if (moduleDto == null || moduleDto.Id <= 0)
-                {
-                    throw new ValidationException("Id", "El ID del módulo debe ser mayor que cero");
-                }
+                var existing = await _moduleData.GetByIdAsync(moduleDto.Id);
+                if (existing == null)
+                    throw new EntityNotFoundException("Module", moduleDto.Id);
 
-                ValidateModule(moduleDto);
+                existing.Name = moduleDto.Name;
+                existing.Active = moduleDto.Active;
 
-                var existingModule = await _moduleData.GetByIdAsync(moduleDto.Id);
-                if (existingModule == null)
-                {
-                    _logger.LogInformation("No se encontró módulo para actualizar con ID: {ModuleId}", moduleDto.Id);
-                    throw new EntityNotFoundException("Modulo", moduleDto.Id);
-                }
-
-                var updatedModule = await _moduleData.UpdateAsync(MapToEntity(moduleDto));
-                return MapToDto(updatedModule);
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (EntityNotFoundException)
-            {
-                throw;
+                var result = await _moduleData.UpdateAsync(existing);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "Error al actualizar el modulo");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al actualizar módulo con ID: {ModuleId}", moduleDto?.Id ?? 0);
-                throw new ExternalServiceException("Base de datos", "Error al actualizar el módulo", ex);
+                _logger.LogError(ex, "Error al actualizar modulo con ID: {ModuleId}", moduleDto.Id);
+                throw;
             }
         }
-
-        private ModuleDto MapToDto(bool updatedModule)
+        /// <summary>
+        /// Actualiza parcialmente un modulo mediante un diccionario de campos.
+        /// </summary>
+        /// <param name="id">ID del modulo a actualizar</param>
+        /// <param name="updatedFields">Diccionario con los nombres de los campos y sus nuevos valores</param>
+        /// <returns>Task</returns>
+        public async Task PatchModuleAsync(ModuleDto moduleDto)
         {
-            throw new NotImplementedException();
-        }
+            if (moduleDto == null || moduleDto.Id <= 0)
+                throw new ValidationException("Id", "El modulo a actualizar debe tener un ID válido");
+            try
+            {
+                // Buscar el modulo existente por su ID
+                var existing = await _moduleData.GetByIdAsync(moduleDto.Id);
+                if (existing == null)
+                    throw new EntityNotFoundException("Module", moduleDto.Id);
 
-        // Método para eliminar un módulo por su ID
+                // Actualizar solo los campos que se pasen en el DTO (moduleDto)
+                // En un PATCH, no se espera que todos los campos estén presentes
+                if (!string.IsNullOrEmpty(moduleDto.Name))
+                    existing.Name = moduleDto.Name;
+
+                if (moduleDto.Active != null)
+                    existing.Active = moduleDto.Active;
+
+
+                // Intentar actualizar en la base de datos
+                var result = await _moduleData.UpdateAsync(existing);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "Error al actualizar el modulo");
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores
+            _logger.LogError(ex, "Error al actualizar parcialmente el modulo con ID: {ModuleId}", moduleDto.Id);
+            throw;
+        }
+    }
+
+
+        /// <summary>
+        /// Realiza una eliminación lógica del modulo.
+        /// </summary>
+        /// <param name="id">ID del modulo</param>
+        public async Task DisableModuleAsync(int id)
+        {
+            if (id <= 0)
+                throw new ValidationException("id", "El ID del modulo debe ser mayor que cero");
+
+            try
+            {
+                var existing = await _moduleData.GetByIdAsync(id);
+                if (existing == null)
+                    throw new EntityNotFoundException("Module", id);
+
+                var result = await _moduleData.DisableAsync(id);
+                if (!result)
+                
+                    throw new ExternalServiceException("Base de datos", "No se pudo desactivar el modulo");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al desactivar modulo con ID: {ModuleId}", id);
+                throw;
+            }
+        }
+        /// <summary>
+        /// Realiza una eliminación total del modulo.
+        /// </summary>
+        /// <param name="id">ID del modulo</param>
         public async Task DeleteModuleAsync(int id)
         {
             if (id <= 0)
-            {
-                throw new ValidationException("id", "El ID del módulo debe ser mayor que cero");
-            }
+                throw new ValidationException("id", "El ID del modulo debe ser mayor que cero");
 
             try
             {
-                var existingModule = await _moduleData.GetByIdAsync(id);
-                if (existingModule == null)
-                {
-                    _logger.LogInformation("No se encontró módulo para eliminar con ID: {ModuleId}", id);
-                    throw new EntityNotFoundException("Modulo", id);
-                }
+                var existing = await _moduleData.GetByIdAsync(id);
+                if (existing == null)
+                    throw new EntityNotFoundException("Module", id);
 
-                await _moduleData.DeleteAsync(id);
-            }
-            catch (ValidationException)
-            {
-                throw;
-            }
-            catch (EntityNotFoundException)
-            {
-                throw;
+                var result = await _moduleData.DeleteAsync(id);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "No se pudo eliminar el modulo");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar módulo con ID: {ModuleId}", id);
-                throw new ExternalServiceException("Base de datos", "Error al eliminar el módulo", ex);
+                _logger.LogError(ex, "Error al eliminar modulo con ID: {ModuleId}", id);
+                throw;
             }
         }
 
@@ -168,7 +216,6 @@ namespace Business
 
             if (string.IsNullOrWhiteSpace(moduleDto.Name))
             {
-                _logger.LogWarning("Se intentó crear/actualizar un módulo con Name vacío");
                 throw new ValidationException("Name", "El Name del módulo es obligatorio");
             }
         }
@@ -184,26 +231,5 @@ namespace Business
             };
         }
 
-        // Método para mapear un DTO a entity
-        private Module MapToEntity(ModuleDto dto)
-        {
-            return new Module
-            {
-                Id = dto.Id,
-                Name = dto.Name,
-                Active = dto.Active
-            };
-        }
-
-        // Método para mapear una lista de entidades a DTOs
-        private IEnumerable<ModuleDto> MapToDtoList(IEnumerable<Module> modules)
-        {
-            var moduleDtos = new List<ModuleDto>();
-            foreach (var module in modules)
-            {
-                moduleDtos.Add(MapToDto(module));
-            }
-            return moduleDtos;
-        }
     }
 }

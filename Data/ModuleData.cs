@@ -64,8 +64,9 @@ namespace Data
                 throw;
             }
         }
+
         ///<summary>
-        ///Actualiza un modulo existente en la base de datos
+        ///Actualiza un Modulo existente en la base de datos
         ///</summary>
         ///<param name="module">Objeto con la informacion actualizada</param>
         ///<returns>True si la operacion fue exitosa, false en caso contrario</returns>
@@ -83,6 +84,73 @@ namespace Data
                 return false;
             }
         }
+
+
+        /// <summary>
+        /// Actualiza parcialmente los campos de un modulo existente.
+        /// path
+        /// </summary>
+        /// <param name="module">Diccionario con los nombres de los campos y sus nuevos valores</param>
+        /// <returns>True si la actualización fue exitosa, false en caso contrario</returns>
+        public async Task<bool> PatchAsync(int moduleId, Module module)
+        {
+            try
+            {
+                // Buscar el modulo existente por su ID
+                var existingModule = await _context.Set<Module>().FindAsync(moduleId);
+                
+                // Si no se encuentra el modulo, retornar false
+                if (existingModule == null)
+                {
+                    _logger.LogError($"Modulo con ID {moduleId} no encontrado.");
+                    return false;
+                }
+
+                // Actualizar solo los campos que han sido modificados
+                if (module.Name != null)
+                    existingModule.Name = module.Name;
+                    
+                if (module.Active != null)
+                    existingModule.Active = module.Active;
+
+                // Guardar los cambios
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error al actualizar el modulo: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// Realiza una eliminación lógica del modulo, marcándolo como inactivo.
+        /// </summary>
+        /// <param name="id">ID del modulo a desactivar</param>
+        /// <returns>True si se desactivó correctamente, false si no se encontró</returns>
+        public async Task<bool> DisableAsync(int id)
+        {
+            try
+            {
+                var module = await _context.Set<Module>().FindAsync(id);
+                if (module == null)
+                    return false;
+
+                module.Active = false;
+                _context.Set<Module>().Update(module); 
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al realizar eliminación lógica del modulo con ID {ModuleId}", id);
+                return false;
+            }
+        }
+
         ///<summary>
         ///Elimina un modulo de la base de datos
         ///</summary>
@@ -106,6 +174,7 @@ namespace Data
                 Console.WriteLine($"Error al elminar el modulo: {ex.Message}");
                 return false;
             }
+
         }
     }
 }
