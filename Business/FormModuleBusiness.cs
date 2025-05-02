@@ -25,7 +25,7 @@ namespace Business
             try
             {
                 var formModules = await _formModuleData.GetAllAsync();
-                return MapToDtoList(formModules);
+                return formModules.Select(MapToDto);
             }
             catch (Exception ex)
             {
@@ -65,11 +65,14 @@ namespace Business
             try
             {
                 ValidateFormModule(formModuleDto);
+                var formModule = new FormModule
+                {
+                    ModuleId = formModuleDto.ModuleId,
+                    FormId = formModuleDto.FormId
+                };
 
-                var formModule = MapToEntity(formModuleDto);
-                var created = await _formModuleData.CreateAsync(formModule);
-
-                return MapToDto(created);
+                var formModuleCreado = await _formModuleData.CreateAsync(formModule);
+                return MapToDto(formModuleCreado);
             }
             catch (Exception ex)
             {
@@ -104,54 +107,68 @@ namespace Business
                 throw;
             }
         }
-
-        private FormModuleDto MapToDto(bool updated)
+        
+        /// <summary>
+        /// Actualiza parcialmente un formModule mediante un DTO.
+        /// </summary>
+        public async Task PatchFormModuleAsync(FormModuleDto formModuleDto)
         {
-            throw new NotImplementedException();
-        }
+            if (formModuleDto == null || formModuleDto.Id <= 0)
+                throw new ValidationException("Id", "El formModule a actualizar debe tener un ID válido");
 
-        public async Task DeleteFormModuleAsync(int id)
-        {
             try
             {
-                if (id <= 0)
-                {
-                    throw new ValidationException("id", "El ID del formModule debe ser mayor que cero");
-                }
-
-                var existing = await _formModuleData.GetByIdAsync(id);
+                var existing = await _formModuleData.GetByIdAsync(formModuleDto.Id);
                 if (existing == null)
-                {
-                    throw new EntityNotFoundException("FormModule", id);
-                }
+                    throw new EntityNotFoundException("FormModule", formModuleDto.Id);
 
-                await _formModuleData.DeleteAsync(id);
+                if (formModuleDto.FormId != 0)
+                    existing.FormId = formModuleDto.FormId;
+
+                if (formModuleDto.ModuleId != 0)
+                    existing.ModuleId = formModuleDto.ModuleId;
+
+                var result = await _formModuleData.UpdateAsync(existing);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "Error al actualizar el formModule");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al eliminar formModule con ID: {FormModuleId}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al eliminar el formModule con ID {id}", ex);
+                _logger.LogError(ex, "Error al actualizar parcialmente el formModule con ID: {formModuleId}", formModuleDto.Id);
+                throw;
             }
         }
+        /// <summary>
+        /// Realiza una eliminación total del FormModule.
+        /// </summary>
+        public async Task DeleteFormModuleAsync(int id)
+        {
+            if (id <= 0)
+                throw new ValidationException("id", "El ID del FormModule debe ser mayor que cero");
 
+            try
+            {
+                var existing = await _formModuleData.GetByIdAsync(id);
+                if (existing == null)
+                    throw new EntityNotFoundException("formModule", id);
+
+                var result = await _formModuleData.DeleteAsync(id);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "No se pudo eliminar el formModule");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar formModule con ID: {formModuleId}", id);
+                throw;
+            }
+        }
         private void ValidateFormModule(FormModuleDto formModuleDto)
         {
-            if (formModuleDto == null)
+            if(formModuleDto == null)
             {
-                throw new ValidationException("El objeto formModule no puede ser nulo");
-            }
-
-            if (formModuleDto.FormId <= 0)
-            {
-                throw new ValidationException("FormId", "El FormId del formModule es obligatorio");
-            }
-
-            if (formModuleDto.ModuleId <= 0)
-            {
-                throw new ValidationException("ModuleId", "El ModuleId del formModule es obligatorio");
+                throw new ValidationException("formModule", "El objeto formModule no puede ser nulo");
             }
         }
-
         private FormModuleDto MapToDto(FormModule formModule)
         {
             return new FormModuleDto
@@ -160,21 +177,6 @@ namespace Business
                 ModuleId = formModule.ModuleId,
                 FormId = formModule.FormId
             };
-        }
-
-        private FormModule MapToEntity(FormModuleDto dto)
-        {
-            return new FormModule
-            {
-                Id = dto.Id,
-                ModuleId = dto.ModuleId,
-                FormId = dto.FormId
-            };
-        }
-
-        private IEnumerable<FormModuleDto> MapToDtoList(IEnumerable<FormModule> entities)
-        {
-            return entities.Select(MapToDto).ToList();
         }
     }
 }

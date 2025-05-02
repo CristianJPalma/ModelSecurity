@@ -2,14 +2,10 @@
 using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
-using System;
 using Utilities.Exceptions;
 
 namespace Business
 {
-    /// <summary>
-    /// Clase de negocio encargada de la lógica relacionada con las personas del sistema.
-    /// </summary>
     public class PersonBusiness
     {
         private readonly PersonData _personData;
@@ -21,13 +17,18 @@ namespace Business
             _logger = logger;
         }
 
-        // Obtener todas las personas
-        public async Task<IEnumerable<PersonDto>> GetAllPersonAsync()
+        public async Task<IEnumerable<PersonDto>> GetAllPersonsAsync()
         {
             try
             {
                 var persons = await _personData.GetAllAsync();
-                return MapToDtoList(persons);
+                return persons.Select(p => new PersonDto
+                {
+                    Id = p.Id,
+                    FirstName = p.FirstName,
+                    LastName = p.LastName,
+                    Email = p.Email
+                });
             }
             catch (Exception ex)
             {
@@ -36,165 +37,155 @@ namespace Business
             }
         }
 
-        // Obtener persona por ID
         public async Task<PersonDto> GetPersonByIdAsync(int id)
         {
             if (id <= 0)
-            {
-                _logger.LogWarning("ID inválido al buscar persona: {PersonId}", id);
                 throw new ValidationException("id", "El ID de la persona debe ser mayor que cero");
-            }
 
             try
             {
                 var person = await _personData.GetByIdAsync(id);
                 if (person == null)
-                {
-                    _logger.LogInformation("Persona no encontrada con ID: {PersonId}", id);
-                    throw new EntityNotFoundException("Person", id);
-                }
+                    throw new EntityNotFoundException("Persona", id);
 
-                return MapToDto(person);
+                return new PersonDto
+                {
+                    Id = person.Id,
+                    FirstName = person.FirstName,
+                    LastName = person.LastName,
+                    Email = person.Email
+                };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener persona con ID: {PersonId}", id);
+                _logger.LogError(ex, "Error al obtener la persona con ID: {PersonId}", id);
                 throw new ExternalServiceException("Base de datos", $"Error al recuperar la persona con ID {id}", ex);
             }
         }
 
-        // Crear persona
         public async Task<PersonDto> CreatePersonAsync(PersonDto personDto)
         {
             try
             {
                 ValidatePerson(personDto);
+                var person = new Person
+                {
+                    FirstName = personDto.FirstName,
+                    LastName = personDto.LastName,
+                    Email = personDto.Email,
+                };
 
-                var entity = MapToEntity(personDto);
-                var created = await _personData.CreateAsync(entity);
-
-                return MapToDto(created);
+                var createdPerson = await _personData.CreateAsync(person);
+                return new PersonDto
+                {
+                    Id = createdPerson.Id,
+                    FirstName = createdPerson.FirstName,
+                    LastName = createdPerson.LastName,
+                    Email = createdPerson.Email
+                };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nueva persona: {FirstName}", personDto?.FirstName ?? "null");
+                _logger.LogError(ex, "Error al crear persona: {PersonName}", personDto?.FirstName ?? "null");
                 throw new ExternalServiceException("Base de datos", "Error al crear la persona", ex);
             }
         }
 
-        // Actualizar persona
-        public async Task<PersonDto> UpdatePersonAsync(int id, PersonDto personDto)
+        public async Task UpdatePersonAsync(PersonDto personDto)
         {
             if (personDto == null || personDto.Id <= 0)
-            {
-                throw new ValidationException("id", "El ID de la persona debe ser mayor que cero");
-            }
+                throw new ValidationException("Id", "La persona a actualizar debe tener un ID válido");
+
+            ValidatePerson(personDto);
 
             try
             {
-                ValidatePerson(personDto);
-
                 var existing = await _personData.GetByIdAsync(personDto.Id);
                 if (existing == null)
-                {
-                    _logger.LogInformation("Persona no encontrada para actualizar: {PersonId}", personDto.Id);
-                    throw new EntityNotFoundException("Person", personDto.Id);
-                }
+                    throw new EntityNotFoundException("Persona", personDto.Id);
 
-                var updated = await _personData.UpdateAsync(MapToEntity(personDto));
-                return MapToDto(updated);
+                existing.FirstName = personDto.FirstName;
+                existing.LastName = personDto.LastName;
+                existing.Email = personDto.Email;
+
+                var result = await _personData.UpdateAsync(existing);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "Error al actualizar la persona");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al actualizar persona con ID: {PersonId}", personDto.Id);
-                throw new ExternalServiceException("Base de datos", "Error al actualizar la persona", ex);
+                throw;
             }
         }
 
-        private PersonDto MapToDto(bool updated)
+        public async Task PatchPersonAsync(PersonDto personDto)
         {
-            throw new NotImplementedException();
+            if (personDto == null || personDto.Id <= 0)
+                throw new ValidationException("Id", "La persona a actualizar debe tener un ID válido");
+
+            try
+            {
+                var existing = await _personData.GetByIdAsync(personDto.Id);
+                if (existing == null)
+                    throw new EntityNotFoundException("Persona", personDto.Id);
+
+                if (!string.IsNullOrEmpty(personDto.FirstName))
+                    existing.FirstName = personDto.FirstName;
+
+                if (!string.IsNullOrEmpty(personDto.LastName))
+                    existing.LastName = personDto.LastName;
+
+                if (!string.IsNullOrEmpty(personDto.Email))
+                    existing.Email = personDto.Email;
+
+                var result = await _personData.UpdateAsync(existing);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "Error al actualizar parcialmente la persona");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente la persona con ID: {PersonId}", personDto.Id);
+                throw;
+            }
         }
 
-        // Eliminar persona
+
         public async Task DeletePersonAsync(int id)
         {
             if (id <= 0)
-            {
                 throw new ValidationException("id", "El ID de la persona debe ser mayor que cero");
-            }
 
             try
             {
                 var existing = await _personData.GetByIdAsync(id);
                 if (existing == null)
-                {
-                    _logger.LogInformation("Persona no encontrada para eliminar con ID: {PersonId}", id);
-                    throw new EntityNotFoundException("Person", id);
-                }
+                    throw new EntityNotFoundException("Persona", id);
 
-                await _personData.DeleteAsync(id);
+                var result = await _personData.DeleteAsync(id);
+                if (!result)
+                    throw new ExternalServiceException("Base de datos", "No se pudo eliminar la persona");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar persona con ID: {PersonId}", id);
-                throw new ExternalServiceException("Base de datos", "Error al eliminar la persona", ex);
+                throw;
             }
         }
 
-        // Validación
         private void ValidatePerson(PersonDto personDto)
         {
             if (personDto == null)
-            {
-                throw new ValidationException("El objeto persona no puede ser nulo");
-            }
+                throw new ValidationException("personDto", "El objeto persona no puede ser nulo");
 
             if (string.IsNullOrWhiteSpace(personDto.FirstName))
-            {
-                _logger.LogWarning("FirstName vacío al crear/actualizar persona");
-                throw new ValidationException("FirstName", "El FirstName de la persona es obligatorio");
-            }
+                throw new ValidationException("FirstName", "El nombre es obligatorio");
 
             if (string.IsNullOrWhiteSpace(personDto.LastName))
-            {
-                _logger.LogWarning("LastName vacío al crear/actualizar persona");
-                throw new ValidationException("LastName", "El LastName de la persona es obligatorio");
-            }
+                throw new ValidationException("LastName", "El apellido es obligatorio");
 
             if (string.IsNullOrWhiteSpace(personDto.Email))
-            {
-                _logger.LogWarning("Email vacío al crear/actualizar persona");
-                throw new ValidationException("Email", "El Email de la persona es obligatorio");
-            }
-        }
-
-        // Mapeos
-        private PersonDto MapToDto(Person person)
-        {
-            return new PersonDto
-            {
-                Id = person.Id,
-                FirstName = person.FirstName,
-                LastName = person.LastName,
-                Email = person.Email
-            };
-        }
-
-        private Person MapToEntity(PersonDto dto)
-        {
-            return new Person
-            {
-                Id = dto.Id,
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                Email = dto.Email
-            };
-        }
-
-        private IEnumerable<PersonDto> MapToDtoList(IEnumerable<Person> persons)
-        {
-            return persons.Select(MapToDto).ToList();
+                throw new ValidationException("Email", "El correo electrónico es obligatorio");
         }
     }
 }

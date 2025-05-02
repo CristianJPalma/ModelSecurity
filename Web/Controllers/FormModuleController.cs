@@ -91,47 +91,71 @@ namespace Web.Controllers
             }
         }
 
-        /// <summary>
-        /// Actualiza un FormModule existente
-        /// </summary>
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
-public async Task<IActionResult> UpdateFormModule(int id, [FromBody] FormModuleDto FormModuleDto)
+        public async Task<IActionResult> UpdateFormModule(int id, [FromBody] FormModuleDto formModuleDto)
         {
-            if (id != FormModuleDto.Id)
+            if (id != formModuleDto.Id)
                 return BadRequest(new { message = "El ID del formModule no coincide con el del objeto." });
 
             try
             {
-                await _FormModuleBusiness.UpdateFormModuleAsync(FormModuleDto);
+                await _FormModuleBusiness.UpdateFormModuleAsync(formModuleDto);
                 return NoContent();
             }
             catch (ValidationException ex)
             {
-                _logger.LogWarning(ex, "Validación fallida al actualizar formModule con ID: {FormModuleId}", id);
+                _logger.LogWarning(ex, "Validación fallida al actualizar formodule con ID: {formModuleId}", id);
                 return BadRequest(new { message = ex.Message });
             }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "FormModule no encontrado con ID: {FormId}", id);
+                _logger.LogInformation(ex, "FormModule no encontrado con ID: {FormModuleId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al actualizar FormModule con ID: {FormId}", id);
+                _logger.LogError(ex, "Error al actualizar formModule con ID: {formModuleId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }
 
-        /// <summary>
-        /// Elimina un FormModule por su ID
-        /// </summary>
-        [HttpDelete("{id}")]
+        [HttpPatch("{id}")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PatchFormModule(int id, [FromBody] FormModuleDto FormModuleDto)
+        {
+            if (id != FormModuleDto.Id)
+                return BadRequest(new { message = "El ID del FormModuleDto no coincide con el del objeto." });
+
+            try
+            {
+                await _FormModuleBusiness.PatchFormModuleAsync(FormModuleDto);
+                return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar parcialmente el FormModuleDto con ID: {FormModuleId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "FormModule no encontrado con ID: {FormModuleId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el FormModule con ID: {FormModuleId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
         [ProducesResponseType(404)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> DeleteFormModule(int id)
@@ -141,21 +165,18 @@ public async Task<IActionResult> UpdateFormModule(int id, [FromBody] FormModuleD
                 await _FormModuleBusiness.DeleteFormModuleAsync(id);
                 return NoContent();
             }
-            catch (ValidationException ex)
-            {
-                _logger.LogWarning(ex, "ID inválido para eliminar permiso");
-                return BadRequest(new { message = ex.Message });
-            }
             catch (EntityNotFoundException ex)
             {
-                _logger.LogInformation(ex, "Formulario-Módulo no encontrado con ID: {FormModuleId}", id);
+                _logger.LogInformation(ex, "FormModule no encontrado para eliminación con ID: {ForModuleId}", id);
                 return NotFound(new { message = ex.Message });
             }
             catch (ExternalServiceException ex)
             {
-                _logger.LogError(ex, "Error al eliminar permiso");
+                _logger.LogError(ex, "Error al eliminar FormModule con ID: {FormModuleId}", id);
                 return StatusCode(500, new { message = ex.Message });
             }
         }
+
+
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Business;
 using Entity.DTOs;
-using Entity.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -17,26 +16,15 @@ namespace Web.Controllers
     [Produces("application/json")]
     public class PermissionController : ControllerBase
     {
-        private readonly PermissionBusiness _PermissionBusiness;
+        private readonly PermissionBusiness _permissionBusiness;
         private readonly ILogger<PermissionController> _logger;
 
-        /// <summary>
-        /// Constructor del controlador de permisos
-        /// </summary>
-        /// <param name="PermissionBusiness">Capa de negocio de permisos</param>
-        /// <param name="logger">Logger para registro de eventos</param>
-        public PermissionController(PermissionBusiness PermissionBusiness, ILogger<PermissionController> logger)
+        public PermissionController(PermissionBusiness permissionBusiness, ILogger<PermissionController> logger)
         {
-            _PermissionBusiness = PermissionBusiness;
+            _permissionBusiness = permissionBusiness;
             _logger = logger;
         }
 
-        /// <summary>
-        /// Obtiene todos los permisos del sistema
-        /// </summary>
-        /// <returns>Lista de permisos</returns>
-        /// <response code="200">Retorna la lista de permisos</response>
-        /// <response code="500">Error interno del servidor</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PermissionDto>), 200)]
         [ProducesResponseType(500)]
@@ -44,8 +32,8 @@ namespace Web.Controllers
         {
             try
             {
-                var Permissions = await _PermissionBusiness.GetAllPermissionAsync();
-                return Ok(Permissions);
+                var permissions = await _permissionBusiness.GetAllPermissionsAsync();
+                return Ok(permissions);
             }
             catch (ExternalServiceException ex)
             {
@@ -54,15 +42,6 @@ namespace Web.Controllers
             }
         }
 
-        /// <summary>
-        /// Obtiene un permiso específico por su ID
-        /// </summary>
-        /// <param name="id">ID del permiso</param>
-        /// <returns>Permiso solicitado</returns>
-        /// <response code="200">Retorna el permiso solicitado</response>
-        /// <response code="400">ID proporcionado no válido</response>
-        /// <response code="404">Permiso no encontrado</response>
-        /// <response code="500">Error interno del servidor</response>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(PermissionDto), 200)]
         [ProducesResponseType(400)]
@@ -72,8 +51,8 @@ namespace Web.Controllers
         {
             try
             {
-                var Permission = await _PermissionBusiness.GetPermissionByIdAsync(id);
-                return Ok(Permission);
+                var permission = await _permissionBusiness.GetPermissionByIdAsync(id);
+                return Ok(permission);
             }
             catch (ValidationException ex)
             {
@@ -92,23 +71,15 @@ namespace Web.Controllers
             }
         }
 
-        /// <summary>
-        /// Crea un nuevo permiso en el sistema
-        /// </summary>
-        /// <param name="PermissionDto">Datos del permiso a crear</param>
-        /// <returns>Permiso creado</returns>
-        /// <response code="201">Retorna el permiso creado</response>
-        /// <response code="400">Datos del permiso no válidos</response>
-        /// <response code="500">Error interno del servidor</response>
         [HttpPost]
         [ProducesResponseType(typeof(PermissionDto), 201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> CreatePermission([FromBody] PermissionDto PermissionDto)
+        public async Task<IActionResult> CreatePermission([FromBody] PermissionDto permissionDto)
         {
             try
             {
-                var createdPermission = await _PermissionBusiness.CreatePermissionAsync(PermissionDto);
+                var createdPermission = await _permissionBusiness.CreatePermissionAsync(permissionDto);
                 return CreatedAtAction(nameof(GetPermissionById), new { id = createdPermission.Id }, createdPermission);
             }
             catch (ValidationException ex)
@@ -123,5 +94,114 @@ namespace Web.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdatePermission(int id, [FromBody] PermissionDto permissionDto)
+        {
+            if (id != permissionDto.Id)
+                return BadRequest(new { message = "El ID del permiso no coincide con el del objeto." });
+
+            try
+            {
+                await _permissionBusiness.UpdatePermissionAsync(permissionDto);
+                return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar permiso con ID: {PermissionId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Permiso no encontrado con ID: {PermissionId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar permiso con ID: {PermissionId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpPatch("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> PatchPermission(int id, [FromBody] PermissionDto permissionDto)
+        {
+            if (id != permissionDto.Id)
+                return BadRequest(new { message = "El ID del permiso no coincide con el del objeto." });
+
+            try
+            {
+                await _permissionBusiness.PatchPermissionAsync(permissionDto);
+                return NoContent();
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogWarning(ex, "Validación fallida al actualizar parcialmente el permiso con ID: {PermissionId}", id);
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Permiso no encontrado con ID: {PermissionId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el permiso con ID: {PermissionId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}/disable")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DisablePermission(int id)
+        {
+            try
+            {
+                await _permissionBusiness.DisablePermissionAsync(id);
+                return NoContent();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Permiso no encontrado para desactivación con ID: {PermissionId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al desactivar permiso con ID: {PermissionId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> DeletePermission(int id)
+        {
+            try
+            {
+                await _permissionBusiness.DeletePermissionAsync(id);
+                return NoContent();
+            }
+            catch (EntityNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "Permiso no encontrado para eliminación con ID: {PermissionId}", id);
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ExternalServiceException ex)
+            {
+                _logger.LogError(ex, "Error al eliminar permiso con ID: {PermissionId}", id);
+                return StatusCode(500, new { message = ex.Message });
+            }
+        }
     }
 }

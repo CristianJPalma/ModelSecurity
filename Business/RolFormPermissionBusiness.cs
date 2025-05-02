@@ -2,176 +2,144 @@
 using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
-using Microsoft.SqlServer.Server;
 using Utilities.Exceptions;
 
 namespace Business
 {
-    /// <summary>
-    /// Clase de negocio encargada de la lógica relacionada con los RolFormPermission del sistema.
-    /// </summary>
     public class RolFormPermissionBusiness
     {
-        private readonly RolFormPermissionData _rolFormPermissionData;
+        private readonly RolFormPermissionData _data;
         private readonly ILogger<RolFormPermissionBusiness> _logger;
 
-        public RolFormPermissionBusiness(RolFormPermissionData rolFormPermissionData, ILogger<RolFormPermissionBusiness> logger)
+        public RolFormPermissionBusiness(RolFormPermissionData data, ILogger<RolFormPermissionBusiness> logger)
         {
-            _rolFormPermissionData = rolFormPermissionData;
+            _data = data;
             _logger = logger;
         }
 
-        // Método para obtener todos los RolFormPermissio como DTOs
-        public async Task<IEnumerable<RolFormPermissionDto>> GetAllRolFormPermissionsAsync()
+        public async Task<IEnumerable<RolFormPermissionDto>> GetAllAsync()
         {
             try
             {
-                var rolFormPermissions = await _rolFormPermissionData.GetAllAsync();
-                var rolFormPermissionsDto = new List<RolFormPermissionDto>();
-
-                foreach (var rolFormPermission in rolFormPermissions)
-                {
-                    rolFormPermissionsDto.Add(new RolFormPermissionDto
-                    {
-                        Id = rolFormPermission.Id,
-                        RolId = rolFormPermission.RolId,
-                        PermissionId = rolFormPermission.PermissionId,
-                        FormId = rolFormPermission.FormId
-                    });
-                }
-
-                return rolFormPermissionsDto;
+                var items = await _data.GetAllAsync();
+                return items.Select(MapToDto);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener todos los rolFormPermissions");
-                throw new ExternalServiceException("Base de datos", "Error al recuperar la lista de rolFormPermissions", ex);
+                _logger.LogError(ex, "Error al obtener RolFormPermissions");
+                throw new ExternalServiceException("Base de datos", "Error al obtener la lista de RolFormPermissions", ex);
             }
         }
 
-        // Método para obtener un rolFormPermission por ID como DTO
-        public async Task<RolFormPermissionDto> GetRolFormPermissionByIdAsync(int id)
+        public async Task<RolFormPermissionDto> GetByIdAsync(int id)
         {
             if (id <= 0)
-            {
-                _logger.LogWarning("Se intentó obtener un rolFormPermission con ID inválido: {RolFormPermissionId}", id);
-                throw new Utilities.Exceptions.ValidationException("id", "El ID del rolFormPermission debe ser mayor que cero");
-            }
+                throw new ValidationException("id", "El ID debe ser mayor que cero");
 
             try
             {
-                var rolFormPermission = await _rolFormPermissionData.GetByIdAsync(id);
-                if (rolFormPermission == null)
-                {
-                    _logger.LogInformation("No se encontró ningún rolFormPermission con ID: {RolFormPermissionId}", id);
-                    throw new EntityNotFoundException("RolFormPermissiion", id);
-                }
+                var entity = await _data.GetByIdAsync(id);
+                if (entity == null)
+                    throw new EntityNotFoundException("RolFormPermission", id);
 
-                return new RolFormPermissionDto
-                {
-                    Id = rolFormPermission.Id,
-                    RolId = rolFormPermission.RolId,
-                    PermissionId = rolFormPermission.PermissionId,
-                    FormId = rolFormPermission.FormId
-                };
+                return MapToDto(entity);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al obtener el rolFormPermission con ID: {RolFormPermissionId}", id);
-                throw new ExternalServiceException("Base de datos", $"Error al recuperar el rolFormPermission con ID {id}", ex);
+                _logger.LogError(ex, $"Error al obtener RolFormPermission con ID {id}");
+                throw;
             }
         }
 
-        // Método para crear un rolFormPermission desde un DTO
-        public async Task<RolFormPermissionDto> CreateRolFormPermissionAsync(RolFormPermissionDto rolFormPermissionDto)
+        public async Task<RolFormPermissionDto> CreateAsync(RolFormPermissionDto dto)
         {
+            ValidateDto(dto);
+
             try
             {
-                ValidateRolFormPermission(rolFormPermissionDto);
-
-                var rol = new RolFormPermission
+                var entity = new RolFormPermission
                 {
-                    RolId = rolFormPermissionDto.RolId,
-                    PermissionId = rolFormPermissionDto.PermissionId,
-                    FormId = rolFormPermissionDto.FormId
+                    RolId = dto.RolId,
+                    FormId = dto.FormId,
+                    PermissionId = dto.PermissionId
                 };
 
-                var rolFormPermissionCreado = await _rolFormPermissionData.CreateAsync(rol);
-
-                return new RolFormPermissionDto
-                {
-                    Id = rolFormPermissionCreado.Id,
-                    RolId = rolFormPermissionCreado.RolId,
-                    PermissionId = rolFormPermissionCreado.PermissionId,
-                    FormId = rolFormPermissionCreado.FormId
-                };
+                var created = await _data.CreateAsync(entity);
+                return MapToDto(created);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleRolId}", rolFormPermissionDto.RolId <= 0);
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModulePermissionId}", rolFormPermissionDto.PermissionId <= 0);
-                _logger.LogError(ex, "Error al crear nuevo formModule: {FormModuleFormId}", rolFormPermissionDto.FormId <= 0);
-                throw new ExternalServiceException("Base de datos", "Error al crear el rolFormPermission", ex);
+                _logger.LogError(ex, "Error al crear RolFormPermission");
+                throw;
             }
         }
 
-        // Método para validar el DTO
-        private void ValidateRolFormPermission(RolFormPermissionDto rolFormPermissionDto)
+        public async Task UpdateAsync(RolFormPermissionDto dto)
         {
-            if (rolFormPermissionDto == null)
-            {
-                throw new Utilities.Exceptions.ValidationException("El objeto rolFormPermission no puede ser nulo");
-            }
+            if (dto.Id <= 0)
+                throw new ValidationException("Id", "ID inválido");
 
-            if (rolFormPermissionDto.RolId <= 0)
-            {
-                _logger.LogWarning("Se intentó crear/actualizar un rolFormPermisison con RolId vacío");
-                throw new Utilities.Exceptions.ValidationException("RolId", "El Name del rolFormPermission es obligatorio");
-            }
-            if (rolFormPermissionDto.PermissionId <= 0)
-            {
-                _logger.LogWarning("Se intentó crear/actualizar un rolFormPermisison con PermissionId vacío");
-                throw new Utilities.Exceptions.ValidationException("PermissionId", "El Name del rolFormPermission es obligatorio");
-            }
-            if (rolFormPermissionDto.FormId <= 0)
-            {
-                _logger.LogWarning("Se intentó crear/actualizar un rolFormPermisison con FormId vacío");
-                throw new Utilities.Exceptions.ValidationException("FormId", "El Name del rolFormPermission es obligatorio");
-            }
+            ValidateDto(dto);
+
+            var existing = await _data.GetByIdAsync(dto.Id);
+            if (existing == null)
+                throw new EntityNotFoundException("RolFormPermission", dto.Id);
+
+            existing.RolId = dto.RolId;
+            existing.FormId = dto.FormId;
+            existing.PermissionId = dto.PermissionId;
+
+            if (!await _data.UpdateAsync(existing))
+                throw new ExternalServiceException("Base de datos", "No se pudo actualizar");
         }
-        // Método para mapear de RolFormPermission a RolFormPermissionDTO
-        private RolFormPermissionDto MapToDTO(RolFormPermission rolFormPermission)
+
+        public async Task PatchAsync(RolFormPermissionDto dto)
+        {
+            if (dto.Id <= 0)
+                throw new ValidationException("Id", "ID inválido");
+
+            var existing = await _data.GetByIdAsync(dto.Id);
+            if (existing == null)
+                throw new EntityNotFoundException("RolFormPermission", dto.Id);
+
+            if (dto.RolId != 0)
+                existing.RolId = dto.RolId;
+
+            if (dto.FormId != 0)
+                existing.FormId = dto.FormId;
+
+            if (dto.PermissionId != 0)
+                existing.PermissionId = dto.PermissionId;
+
+            if (!await _data.UpdateAsync(existing))
+                throw new ExternalServiceException("Base de datos", "Error al aplicar cambios parciales");
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var existing = await _data.GetByIdAsync(id);
+            if (existing == null)
+                throw new EntityNotFoundException("RolFormPermission", id);
+
+            if (!await _data.DeleteAsync(id))
+                throw new ExternalServiceException("Base de datos", "Error al eliminar");
+        }
+
+        private void ValidateDto(RolFormPermissionDto dto)
+        {
+            if (dto == null)
+                throw new ValidationException("dto", "El objeto no puede ser nulo");
+        }
+
+        private RolFormPermissionDto MapToDto(RolFormPermission entity)
         {
             return new RolFormPermissionDto
             {
-                Id = rolFormPermission.Id,
-                RolId = rolFormPermission.RolId,
-                PermissionId = rolFormPermission.PermissionId,
-                FormId = rolFormPermission.FormId
+                Id = entity.Id,
+                RolId = entity.RolId,
+                FormId = entity.FormId,
+                PermissionId = entity.PermissionId
             };
-        }
-
-        //Metodo para mapear de RolFormPermissionDTO a RolFormPermission
-        private RolFormPermission MapToEntity(RolFormPermissionDto rolFormPermissionDTO)
-        {
-            return new RolFormPermission
-            {
-                Id = rolFormPermissionDTO.Id,
-                RolId = rolFormPermissionDTO.RolId,
-                PermissionId = rolFormPermissionDTO.PermissionId,
-                FormId = rolFormPermissionDTO.FormId
-
-            };
-        }
-        // Método para mapear una lista de RolFormPermission a una lista de RolFormPermissionDTO
-        private IEnumerable<RolFormPermissionDto> MapToDTOList(IEnumerable<RolFormPermission> rolFormPermissions)
-        {
-            var rolFormPermissionsDTO = new List<RolFormPermissionDto>();
-            foreach (var rolFormPermission in rolFormPermissions)
-            {
-                rolFormPermissionsDTO.Add(MapToDTO(rolFormPermission));
-            }
-            return rolFormPermissionsDTO;
         }
     }
 }
