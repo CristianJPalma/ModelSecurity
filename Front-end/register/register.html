@@ -6,13 +6,14 @@
     <title>Register</title>
 </head>
 <body>
-    <form id="registerUser"method="post">
+    <form id="registerUser" method="post">
         <input type="text" id="firstName" name="firstName" placeholder="First Name" required><br>
         <input type="text" id="lastName" name="lastName" placeholder="Last Name" required><br>
-        <input type="text" id="email" name="email" placeholder="Email" required><br>
-        <input type="text" id="password" name="password" placeholder="Password" required><br>
-        <button type="button" id="registerButton">Acept</button>
-    </form>
+        <input type="email" id="email" name="email" placeholder="Email" required><br>
+        <input type="password" id="password" name="password" placeholder="Password" required><br>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" required><br>
+        <button type="submit">Accept</button>
+    </form>    
     <script src="register.js"></script>
 </body>
 </html>
