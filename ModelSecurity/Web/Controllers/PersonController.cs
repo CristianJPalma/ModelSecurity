@@ -71,28 +71,28 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(PersonDto), 201)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> CreatePerson([FromBody] PersonDto personDto)
-        {
-            try
-            {
-                var createdPerson = await _personBusiness.CreatePersonAsync(personDto);
-                return CreatedAtAction(nameof(GetPersonById), new { id = createdPerson.Id }, createdPerson);
-            }
-            catch (ValidationException ex)
-            {
-                _logger.LogWarning(ex, "Validación fallida al crear persona");
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (ExternalServiceException ex)
-            {
-                _logger.LogError(ex, "Error al crear persona");
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
+        // [HttpPost]
+        // [ProducesResponseType(typeof(PersonDto), 201)]
+        // [ProducesResponseType(400)]
+        // [ProducesResponseType(500)]
+        // public async Task<IActionResult> CreatePerson([FromBody] PersonDto personDto)
+        // {
+        //     try
+        //     {
+        //         var createdPerson = await _personBusiness.CreatePersonAsync(personDto);
+        //         return CreatedAtAction(nameof(GetPersonById), new { id = createdPerson.Id }, createdPerson);
+        //     }
+        //     catch (ValidationException ex)
+        //     {
+        //         _logger.LogWarning(ex, "Validación fallida al crear persona");
+        //         return BadRequest(new { message = ex.Message });
+        //     }
+        //     catch (ExternalServiceException ex)
+        //     {
+        //         _logger.LogError(ex, "Error al crear persona");
+        //         return StatusCode(500, new { message = ex.Message });
+        //     }
+        // }
 
         [HttpPut("{id}")]
         [ProducesResponseType(204)]

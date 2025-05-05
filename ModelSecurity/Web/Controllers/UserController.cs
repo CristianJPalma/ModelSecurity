@@ -66,28 +66,28 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(UserDto), 201)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(500)]
-        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
-        {
-            try
-            {
-                var createdUser = await _userBusiness.CreateUserAsync(userDto);
-                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
-            }
-            catch (ValidationException ex)
-            {
-                _logger.LogWarning(ex, "Validación fallida al crear usuario");
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (ExternalServiceException ex)
-            {
-                _logger.LogError(ex, "Error al crear usuario");
-                return StatusCode(500, new { message = ex.Message });
-            }
-        }
+        // [HttpPost]
+        // [ProducesResponseType(typeof(UserDto), 201)]
+        // [ProducesResponseType(400)]
+        // [ProducesResponseType(500)]
+        // public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
+        // {
+        //     try
+        //     {
+        //         var createdUser = await _userBusiness.CreateUserAsync(userDto);
+        //         return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+        //     }
+        //     catch (ValidationException ex)
+        //     {
+        //         _logger.LogWarning(ex, "Validación fallida al crear usuario");
+        //         return BadRequest(new { message = ex.Message });
+        //     }
+        //     catch (ExternalServiceException ex)
+        //     {
+        //         _logger.LogError(ex, "Error al crear usuario");
+        //         return StatusCode(500, new { message = ex.Message });
+        //     }
+        // }
 
         [HttpPut("{id}")]
         [ProducesResponseType(204)]
