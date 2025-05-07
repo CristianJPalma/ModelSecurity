@@ -27,13 +27,13 @@ namespace Entity.Context
         public DbSet<Rol> Rol { get; set; }
         public DbSet<Form> Form {get;set;}
 
-        public DbSet<FormModule> formModule  {get;set;}
-         public DbSet<Module> module  {get;set;}
-          public DbSet<Permission> Permission  {get;set;}
-           public DbSet<Person> Person  {get;set;}
-            public DbSet<RolFormPermission> RolFormPermission  {get;set;}
-             public DbSet<RolUser> RolUser  {get;set;}
-              public DbSet<User> User  {get;set;}
+        public DbSet<FormModule> FormModule  {get;set;}
+        public DbSet<Module> Module  {get;set;}
+        public DbSet<Permission> Permission  {get;set;}
+        public DbSet<Person> Person  {get;set;}
+        public DbSet<RolFormPermission> RolFormPermission  {get;set;}
+        public DbSet<RolUser> RolUser  {get;set;}
+        public DbSet<User> User  {get;set;}
 
               
 

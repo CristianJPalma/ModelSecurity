@@ -1,4 +1,5 @@
 ﻿using Data;
+using Entity.Context;
 using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -8,11 +9,13 @@ namespace Business
 {
     public class UserBusiness
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserData _userData;
         private readonly ILogger<UserBusiness> _logger;
 
-        public UserBusiness(UserData userData, ILogger<UserBusiness> logger)
+        public UserBusiness(ApplicationDbContext context, UserData userData, ILogger<UserBusiness> logger)
         {
+            _context = context;
             _userData = userData;
             _logger = logger;
         }
@@ -66,7 +69,25 @@ namespace Business
                 throw new ExternalServiceException("Base de datos", $"Error al recuperar el usuario con ID {id}", ex);
             }
         }
+        public List<MenuDto> GetMenuByUserId(int userId)
+        {
+            var query = from ru in _context.RolUser
+                        join r in _context.Rol on ru.RolId equals r.Id
+                        join rfp in _context.RolFormPermission on r.Id equals rfp.RolId
+                        join f in _context.Form on rfp.FormId equals f.Id
+                        join p in _context.Permission on rfp.PermissionId equals p.Id
+                        join fm in _context.FormModule on f.Id equals fm.FormId
+                        join m in _context.Module on fm.ModuleId equals m.Id
+                        where ru.UserId == userId
+                        select new MenuDto
+                        {
+                            Modulo = m.Name,
+                            Formulario = f.Name,
+                            Permiso = p.Name
+                        };
 
+            return query.Distinct().ToList();
+        }
         public async Task<UserDto> CreateUserAsync(UserDto userDto)
         {
             try

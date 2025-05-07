@@ -35,8 +35,10 @@ loginUser.addEventListener('submit', async (evento) => {
         loginUser.reset();
         
         // Guarda el token
+        
         localStorage.setItem('token', resultado.token);
         localStorage.setItem("userId", userId);
+    
         
         
         // Redirige o muestra contenido protegido
