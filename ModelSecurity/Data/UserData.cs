@@ -34,6 +34,14 @@ namespace Data
             }
         }
 
+        public async Task<User?> GetUserWithPersonByEmailAsync(string email)
+        {
+            return await _context.User
+                .Include(u => u.Person)
+                .FirstOrDefaultAsync(u => u.Person.Email == email);
+        }
+
+
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _context.Set<User>().ToListAsync();
@@ -141,5 +149,7 @@ namespace Data
                 return false;
             }
         }
+
+        
     }
 }

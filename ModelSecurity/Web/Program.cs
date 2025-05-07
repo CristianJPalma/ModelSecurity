@@ -3,6 +3,9 @@ using Data;
 using Entity.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +49,7 @@ builder.Services.AddScoped<RolUserBusiness>();
 // Registrar clases de User
 builder.Services.AddScoped<UserData>();
 builder.Services.AddScoped<UserBusiness>();
+builder.Services.AddScoped<LoginBusiness>();
 
 // Agregar CORS para permitir cualquier origen
 builder.Services.AddCors(opciones =>
@@ -63,6 +67,19 @@ builder.Services.AddCors(opciones =>
 builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
     opciones.UseSqlServer("name=DefaultConnection"));
 
+// Agregar configuración de JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("EsteEsUnSecretoSuperSeguroDe32Caracteres!!")) // Cambia esto por algo más seguro
+        };
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
@@ -76,6 +93,7 @@ app.UseHttpsRedirection();
 
 // Habilitar CORS
 app.UseCors();
+
 
 app.UseAuthorization();
 app.MapControllers();

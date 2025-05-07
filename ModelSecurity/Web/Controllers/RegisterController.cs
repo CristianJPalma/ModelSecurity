@@ -42,7 +42,8 @@ namespace Web.Controllers
                 UserName = dto.UserName,
                 Password = dto.Password, // más adelante: hasheado
                 Code = $"User{person.Id}",
-                PersonId = person.Id
+                PersonId = person.Id,
+                Active = true
             };
 
             _context.User.Add(user);
