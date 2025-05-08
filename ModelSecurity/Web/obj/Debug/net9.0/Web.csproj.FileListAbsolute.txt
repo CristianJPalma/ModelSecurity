@@ -883,3 +883,5 @@ C:\xampp\htdocs\ModelSecurity\ModelSecurity\Web\obj\Debug\net9.0\Web.pdb
 C:\xampp\htdocs\ModelSecurity\ModelSecurity\Web\obj\Debug\net9.0\Web.genruntimeconfig.cache
 C:\xampp\htdocs\ModelSecurity\ModelSecurity\Web\obj\Debug\net9.0\ref\Web.dll
 C:\xampp\htdocs\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\xampp\htdocs\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\System.Formats.Asn1.dll
+C:\xampp\htdocs\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\System.Text.Json.dll

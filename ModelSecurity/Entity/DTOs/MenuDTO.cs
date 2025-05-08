@@ -11,6 +11,7 @@ namespace Entity.DTOs
         public string Rol { get; set; }
         public string Modulo { get; set; }
         public string Formulario { get; set; }
+        public string FormCode {get;set;}
         public string Permiso { get; set; }
     }
 }
