@@ -1,9 +1,10 @@
-﻿using Data;
+﻿using AutoMapper;
+using Data.UnitOfWork;
 using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
 using Utilities.Exceptions;
-
+using System;
 namespace Business
 {
     /// <summary>
@@ -11,13 +12,21 @@ namespace Business
     /// </summary>
     public class ModuleBusiness
     {
-        private readonly ModuleData _moduleData;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<ModuleBusiness> _logger;
+        private readonly IMapper _mapper;
+        private readonly IModuleValidationStrategy _validationStrategy;
 
-        public ModuleBusiness(ModuleData moduleData, ILogger<ModuleBusiness> logger)
+        public ModuleBusiness(
+            IUnitOfWork unitOfWork,
+            ILogger<ModuleBusiness> logger,
+            IMapper mapper,
+            IModuleValidationStrategy validationStrategy)
         {
-            _moduleData = moduleData;
+            _unitOfWork = unitOfWork;
             _logger = logger;
+            _mapper = mapper;
+            _validationStrategy = validationStrategy;
         }
 
         // Método para obtener todos los módulos como DTOs
@@ -25,8 +34,8 @@ namespace Business
         {
             try
             {
-                var modules = await _moduleData.GetAllAsync();
-                return modules.Select(MapToDto);
+                var modules = await _unitOfWork.Modules.GetAllAsync();
+                return _mapper.Map<IEnumerable<ModuleDto>>(modules);
             }
             catch (Exception ex)
             {
@@ -46,14 +55,14 @@ namespace Business
 
             try
             {
-                var module = await _moduleData.GetByIdAsync(id);
+                var module = await _unitOfWork.Modules.GetByIdAsync(id);
                 if (module == null)
                 {
                     _logger.LogInformation("No se encontró ningún módulo con ID: {ModuleId}", id);
                     throw new EntityNotFoundException("Modulo", id);
                 }
 
-                return MapToDto(module);
+                return _mapper.Map<ModuleDto>(module);
             }
             catch (Exception ex)
             {
@@ -67,18 +76,13 @@ namespace Business
         {
             try
             {
-                ValidateModule(moduleDto);
-                var module = new Module
-                {
-                    Name = moduleDto.Name,
-                    Active = moduleDto.Active
-                };
+                _validationStrategy.Validate(moduleDto);
+                var module = _mapper.Map<Module>(moduleDto);
+                module.CreateAt = DateTime.Now;
 
-                
-                 module.CreateAt=DateTime.Now;
-
-                var moduleCreado = await _moduleData.CreateAsync(module);
-                return MapToDto(moduleCreado);
+                await _unitOfWork.Modules.AddAsync(module);
+                await _unitOfWork.SaveAsync();
+                return _mapper.Map<ModuleDto>(module);
             }
             catch (Exception ex)
             {
@@ -93,20 +97,17 @@ namespace Business
             if (moduleDto == null || moduleDto.Id <= 0)
                 throw new ValidationException("Id", "El modulo a actualizar debe tener un ID válido");
 
-            ValidateModule(moduleDto);
+            _validationStrategy.Validate(moduleDto);
 
             try
             {
-                var existing = await _moduleData.GetByIdAsync(moduleDto.Id);
+                var existing = await _unitOfWork.Modules.GetByIdAsync(moduleDto.Id);
                 if (existing == null)
                     throw new EntityNotFoundException("Module", moduleDto.Id);
-
-                existing.Name = moduleDto.Name;
-                existing.Active = moduleDto.Active;
-
-                var result = await _moduleData.UpdateAsync(existing);
-                if (!result)
-                    throw new ExternalServiceException("Base de datos", "Error al actualizar el modulo");
+                
+                _mapper.Map(moduleDto, existing);
+                _unitOfWork.Modules.Update(existing);
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {
@@ -127,7 +128,7 @@ namespace Business
             try
             {
                 // Buscar el modulo existente por su ID
-                var existing = await _moduleData.GetByIdAsync(moduleDto.Id);
+                var existing = await _unitOfWork.Modules.GetByIdAsync(moduleDto.Id);
                 if (existing == null)
                     throw new EntityNotFoundException("Module", moduleDto.Id);
 
@@ -141,18 +142,16 @@ namespace Business
 
 
                 // Intentar actualizar en la base de datos
-                var result = await _moduleData.UpdateAsync(existing);
-                if (!result)
-                    throw new ExternalServiceException("Base de datos", "Error al actualizar el modulo");
+                _unitOfWork.Modules.Update(existing);
+                await _unitOfWork.SaveAsync();
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                _logger.LogError(ex, "Error al actualizar parcialmente el modulo con ID: {ModuleId}", moduleDto.Id);
+                throw;
+            }
         }
-        catch (Exception ex)
-        {
-            // Manejo de errores
-            _logger.LogError(ex, "Error al actualizar parcialmente el modulo con ID: {ModuleId}", moduleDto.Id);
-            throw;
-        }
-    }
-
 
         /// <summary>
         /// Realiza una eliminación lógica del modulo.
@@ -165,14 +164,11 @@ namespace Business
 
             try
             {
-                var existing = await _moduleData.GetByIdAsync(id);
-                if (existing == null)
-                    throw new EntityNotFoundException("Module", id);
-
-                var result = await _moduleData.DisableAsync(id);
+                var result = await _unitOfWork.Modules.DisableAsync(id);
                 if (!result)
-                
-                    throw new ExternalServiceException("Base de datos", "No se pudo desactivar el modulo");
+                    throw new ExternalServiceException("Base de datos", "No se pudo desactivar el Modulo");
+
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {
@@ -191,13 +187,12 @@ namespace Business
 
             try
             {
-                var existing = await _moduleData.GetByIdAsync(id);
+                var existing = await _unitOfWork.Modules.GetByIdAsync(id);
                 if (existing == null)
                     throw new EntityNotFoundException("Module", id);
 
-                var result = await _moduleData.DeleteAsync(id);
-                if (!result)
-                    throw new ExternalServiceException("Base de datos", "No se pudo eliminar el modulo");
+                _unitOfWork.Modules.Delete(existing);
+                await _unitOfWork.SaveAsync();
             }
             catch (Exception ex)
             {
@@ -205,31 +200,5 @@ namespace Business
                 throw;
             }
         }
-
-        // Método para validar el DTO
-        private void ValidateModule(ModuleDto moduleDto)
-        {
-            if (moduleDto == null)
-            {
-                throw new ValidationException("El objeto módulo no puede ser nulo");
-            }
-
-            if (string.IsNullOrWhiteSpace(moduleDto.Name))
-            {
-                throw new ValidationException("Name", "El Name del módulo es obligatorio");
-            }
-        }
-
-        // Método para mapear un entity a DTO
-        private ModuleDto MapToDto(Module module)
-        {
-            return new ModuleDto
-            {
-                Id = module.Id,
-                Name = module.Name,
-                Active = module.Active
-            };
-        }
-
     }
 }

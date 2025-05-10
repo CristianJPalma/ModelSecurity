@@ -1,4 +1,5 @@
-﻿﻿using Data;
+﻿﻿using AutoMapper;
+using Data.UnitOfWork;
 using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
@@ -6,27 +7,51 @@ using Utilities.Exceptions;
 
 namespace Business
 {
-    /// <summary>
-    /// Clase de negocio encargada de la lógica relacionada con los formularios del sistema.
-    /// </summary>
-    public class FormBusiness
+    public class FormBusiness : BaseBusiness<Form, FormDto>
     {
-        private readonly FormData _formData;
-        private readonly ILogger<FormBusiness> _logger;
+        private readonly IFormValidationStrategy _validationStrategy;
 
-        public FormBusiness(FormData formData, ILogger<FormBusiness> logger)
+        public FormBusiness(
+            IUnitOfWork unitOfWork,
+            ILogger<FormBusiness> logger,
+            IMapper mapper,
+            IFormValidationStrategy validationStrategy)
+            : base(unitOfWork, mapper, logger)
         {
-            _formData = formData;
-            _logger = logger;
+            _validationStrategy = validationStrategy;
+        }
+
+        protected override async Task<IEnumerable<Form>> GetAllEntitiesAsync()
+        {
+            return await _unitOfWork.Forms.GetAllAsync();
+        }
+
+        public async Task<FormDto> CreateFormAsync(FormDto formDto)
+        {
+            try
+            {
+                _validationStrategy.Validate(formDto);
+                var form = _mapper.Map<Form>(formDto);
+                form.CreateAt = DateTime.Now;
+
+                await _unitOfWork.Forms.AddAsync(form);
+                await _unitOfWork.SaveAsync();
+
+                return _mapper.Map<FormDto>(form);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al crear formulario: {FormNombre}", formDto?.Name ?? "null");
+                throw new ExternalServiceException("Base de datos", "Error al crear el formulario", ex);
+            }
         }
 
         public async Task<IEnumerable<FormDto>> GetAllFormsAsync()
         {
             try
             {
-
-                var forms = await _formData.GetAllAsync();
-                return forms.Select(MapToDto);
+                var forms = await _unitOfWork.Forms.GetAllAsync();
+                return _mapper.Map<IEnumerable<FormDto>>(forms); // Usar AutoMapper
             }
             catch (Exception ex)
             {
@@ -42,11 +67,11 @@ namespace Business
 
             try
             {
-                var form = await _formData.GetByIdAsync(id);
+                var form = await _unitOfWork.Forms.GetByIdAsync(id);
                 if (form == null)
                     throw new EntityNotFoundException("Form", id);
 
-                return MapToDto(form);
+                return _mapper.Map<FormDto>(form); // Usar AutoMapper
             }
             catch (Exception ex)
             {
@@ -55,51 +80,22 @@ namespace Business
             }
         }
 
-        public async Task<FormDto> CreateFormAsync(FormDto formDto)
-        {
-            try
-            {
-                ValidateForm(formDto);
-                var form = new Form
-                {
-                    Name = formDto.Name,
-                    Code = formDto.Code,
-                    Active = formDto.Active
-                };
-
-                
-                 form.CreateAt=DateTime.Now;
-
-                var formCreado = await _formData.CreateAsync(form);
-                return MapToDto(formCreado);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error al crear formulario: {FormNombre}", formDto?.Name ?? "null");
-                throw new ExternalServiceException("Base de datos", "Error al crear el formulario", ex);
-            }
-        }
-
         public async Task UpdateFormAsync(FormDto formDto)
         {
             if (formDto == null || formDto.Id <= 0)
                 throw new ValidationException("Id", "El formulario a actualizar debe tener un ID válido");
 
-            ValidateForm(formDto);
+            _validationStrategy.Validate(formDto); // Usar strategy aquí
 
             try
             {
-                var existing = await _formData.GetByIdAsync(formDto.Id);
+                var existing = await _unitOfWork.Forms.GetByIdAsync(formDto.Id);
                 if (existing == null)
                     throw new EntityNotFoundException("Form", formDto.Id);
 
-                existing.Name = formDto.Name;
-                existing.Code = formDto.Code;
-                existing.Active = formDto.Active;
-
-                var result = await _formData.UpdateAsync(existing);
-                if (!result)
-                    throw new ExternalServiceException("Base de datos", "Error al actualizar el formulario");
+                _mapper.Map(formDto, existing); // Actualizar entidad con AutoMapper
+                _unitOfWork.Forms.Update(existing);
+                await _unitOfWork.SaveAsync(); // Guardar cambios en la base de datos
             }
             catch (Exception ex)
             {
@@ -107,56 +103,37 @@ namespace Business
                 throw;
             }
         }
-            /// <summary>
-            /// Actualiza parcialmente un formulario mediante un diccionario de campos.
-            /// </summary>
-            /// <param name="id">ID del formulario a actualizar</param>
-            /// <param name="updatedFields">Diccionario con los nombres de los campos y sus nuevos valores</param>
-            /// <returns>Task</returns>
-            public async Task PatchFormAsync(FormDto formDto)
+
+        public async Task PatchFormAsync(FormDto formDto)
+        {
+            if (formDto == null || formDto.Id <= 0)
+                throw new ValidationException("Id", "El formulario a actualizar debe tener un ID válido");
+
+            try
             {
-        if (formDto == null || formDto.Id <= 0)
-            throw new ValidationException("Id", "El formulario a actualizar debe tener un ID válido");
+                var existing = await _unitOfWork.Forms.GetByIdAsync(formDto.Id);
+                if (existing == null)
+                    throw new EntityNotFoundException("Form", formDto.Id);
 
+                if (!string.IsNullOrEmpty(formDto.Name))
+                    existing.Name = formDto.Name;
 
+                if (!string.IsNullOrEmpty(formDto.Code))
+                    existing.Code = formDto.Code;
 
-        try
-        {
-            // Buscar el formulario existente por su ID
-            var existing = await _formData.GetByIdAsync(formDto.Id);
-            if (existing == null)
-                throw new EntityNotFoundException("Form", formDto.Id);
+                if (formDto.Active != null)
+                    existing.Active = formDto.Active;
 
-            // Actualizar solo los campos que se pasen en el DTO (FormDto)
-            // En un PATCH, no se espera que todos los campos estén presentes
-            if (!string.IsNullOrEmpty(formDto.Name))
-                existing.Name = formDto.Name;
-
-            if (!string.IsNullOrEmpty(formDto.Code))
-                existing.Code = formDto.Code;
-
-            if (formDto.Active != null)
-                existing.Active = formDto.Active;
-
-
-            // Intentar actualizar en la base de datos
-            var result = await _formData.UpdateAsync(existing);
-            if (!result)
-                throw new ExternalServiceException("Base de datos", "Error al actualizar el formulario");
+                _unitOfWork.Forms.Update(existing);
+                await _unitOfWork.SaveAsync(); // Guardar cambios en la base de datos
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al actualizar parcialmente el formulario con ID: {FormId}", formDto.Id);
+                throw;
+            }
         }
-        catch (Exception ex)
-        {
-            // Manejo de errores
-            _logger.LogError(ex, "Error al actualizar parcialmente el formulario con ID: {FormId}", formDto.Id);
-            throw;
-        }
-    }
 
-
-        /// <summary>
-        /// Realiza una eliminación lógica del formulario.
-        /// </summary>
-        /// <param name="id">ID del formulario</param>
         public async Task DisableFormAsync(int id)
         {
             if (id <= 0)
@@ -164,27 +141,19 @@ namespace Business
 
             try
             {
-                var existing = await _formData.GetByIdAsync(id);
-                if (existing == null)
-                    throw new EntityNotFoundException("Form", id);
-
-                var result = await _formData.DisableAsync(id);
+                var result = await _unitOfWork.Forms.DisableAsync(id);
                 if (!result)
                     throw new ExternalServiceException("Base de datos", "No se pudo desactivar el formulario");
-                
-                
+
+                await _unitOfWork.SaveAsync(); // Guardar cambios en la base de datos
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al desactivar formulario con ID: {FormId}", id);
                 throw;
             }
-        }   
+        }
 
-        /// <summary>
-        /// Realiza una eliminación total del formulario.
-        /// </summary>
-        /// <param name="id">ID del formulario</param>
         public async Task DeleteFormAsync(int id)
         {
             if (id <= 0)
@@ -192,39 +161,18 @@ namespace Business
 
             try
             {
-                var existing = await _formData.GetByIdAsync(id);
+                var existing = await _unitOfWork.Forms.GetByIdAsync(id);
                 if (existing == null)
                     throw new EntityNotFoundException("Form", id);
 
-                var result = await _formData.DeleteAsync(id);
-                if (!result)
-                    throw new ExternalServiceException("Base de datos", "No se pudo eliminar el formulario");
+                _unitOfWork.Forms.Delete(existing);
+                await _unitOfWork.SaveAsync(); // Guardar cambios en la base de datos
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error al eliminar formulario con ID: {FormId}", id);
                 throw;
             }
-        }
-
-        private void ValidateForm(FormDto formDto)
-        {
-            if (formDto == null)
-                throw new ValidationException("formDto", "El objeto formulario no puede ser nulo");
-
-            if (string.IsNullOrWhiteSpace(formDto.Code))
-                throw new ValidationException("Code", "El Code del formulario es obligatorio");
-        }
-
-        private FormDto MapToDto(Form form)
-        {
-            return new FormDto
-            {
-                Id = form.Id,
-                Name = form.Name,
-                Code = form.Code,
-                Active = form.Active
-            };
         }
     }
 }

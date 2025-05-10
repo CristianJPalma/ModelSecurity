@@ -2,6 +2,8 @@ using Data;
 using Entity.DTOs;
 using Entity.Model;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Utilities;
 using Utilities.Exceptions;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,11 +16,13 @@ namespace Business
     {
         private readonly UserData _userData;
         private readonly ILogger<LoginBusiness> _logger;
+        private readonly JwtSettings _jwtSettings;
 
-        public LoginBusiness(UserData userData, ILogger<LoginBusiness> logger)
+        public LoginBusiness(UserData userData, ILogger<LoginBusiness> logger, IOptions<JwtSettings> jwtSettings)
         {
             _userData = userData;
             _logger = logger;
+            _jwtSettings = jwtSettings.Value;
         }
 
         public async Task<object> LoginAsync(LoginDto loginDto)
@@ -58,24 +62,24 @@ namespace Business
         private string GenerateJwtToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("EsteEsUnSecretoSuperSeguroDe32Caracteres!!"); // Usa una clave segura
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Person.Email),
+                    // Agregar más claims si es necesario
                 }),
-                Expires = DateTime.UtcNow.AddHours(1), // Establece la duración del token
+                Expires = DateTime.UtcNow.AddHours(_jwtSettings.TokenLifetime),
+                Issuer = _jwtSettings.Issuer,
+                Audience = _jwtSettings.Audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
-        
-
-
     }
 }

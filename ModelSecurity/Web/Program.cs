@@ -1,13 +1,22 @@
 using Business;
 using Data;
+using Data.IRepositories;
+using Data.UnitOfWork;
+using Data.Repositories;
 using Entity.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+// Configuración de JWT
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
 // Add services to the container
 builder.Services.AddControllers();
@@ -15,7 +24,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Registrar clases de Form
-builder.Services.AddScoped<FormData>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IFormRepository, FormRepository>();
 builder.Services.AddScoped<FormBusiness>();
 
 // Registrar clases de FormModule
@@ -23,7 +33,7 @@ builder.Services.AddScoped<FormModuleData>();
 builder.Services.AddScoped<FormModuleBusiness>();
 
 // Registrar clases de Module
-builder.Services.AddScoped<ModuleData>();
+builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
 builder.Services.AddScoped<ModuleBusiness>();
 
 // Registrar clases de Permission
