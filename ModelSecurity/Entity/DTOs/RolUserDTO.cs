@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class RolUserDto
+    public class RolUserDto : BaseDto
     {
-        public int Id { get; set; }
+
         public int UserId { get; set; }
         public int RolId { get; set; }
 

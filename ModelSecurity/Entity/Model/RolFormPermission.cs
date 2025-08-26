@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Entity.Model
 {
-    public class RolFormPermission
+    public class RolFormPermission : BaseModel
     {
-        public int Id { get; set; }
         public int RolId { get; set; }
         public Rol Rol { get; set; }
         public int PermissionId { get; set; }

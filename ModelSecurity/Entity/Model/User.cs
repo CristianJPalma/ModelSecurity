@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Entity.Model
 {
-    public class User
+    public class User : BaseModel
     {
-        public int Id { get; set; }
         public int PersonId { get; set; }
         public Person Person { get; set; }
         public string UserName { get; set; }

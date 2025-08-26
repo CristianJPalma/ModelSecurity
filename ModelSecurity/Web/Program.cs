@@ -1,8 +1,5 @@
 using Business;
 using Data;
-using Data.IRepositories;
-using Data.UnitOfWork;
-using Data.Repositories;
 using Entity.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -10,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Utilities;
+using Data.Implements;
+using Business.Implements;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Registrar clases de Form
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IFormRepository, FormRepository>();
+builder.Services.AddScoped<FormData>();
 builder.Services.AddScoped<FormBusiness>();
 
 // Registrar clases de FormModule
@@ -33,7 +31,7 @@ builder.Services.AddScoped<FormModuleData>();
 builder.Services.AddScoped<FormModuleBusiness>();
 
 // Registrar clases de Module
-builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
+builder.Services.AddScoped<ModuleData>();
 builder.Services.AddScoped<ModuleBusiness>();
 
 // Registrar clases de Permission

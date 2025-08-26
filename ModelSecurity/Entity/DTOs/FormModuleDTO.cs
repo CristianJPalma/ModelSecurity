@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Entity.DTOs
 {
-    public class FormModuleDto
+    public class FormModuleDto : BaseDto
     {
-        public int Id { get; set; }
         public int ModuleId { get; set; }
         public int FormId { get; set; }
 
