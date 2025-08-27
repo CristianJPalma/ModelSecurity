@@ -39,12 +39,61 @@ namespace Entity.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Person ↔ User (1:1)
             modelBuilder.Entity<Person>()
                 .HasOne(p => p.User)
                 .WithOne(u => u.Person)
-                .HasForeignKey<User>(u => u.PersonId);
+                .HasForeignKey<User>(u => u.PersonId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // User ↔ Rol (N:N) → RolUser
+            modelBuilder.Entity<RolUser>()
+                .HasOne(ru => ru.User)
+                .WithMany(u => u.RolUsers)
+                .HasForeignKey(ru => ru.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RolUser>()
+                .HasOne(ru => ru.Rol)
+                .WithMany(r => r.RolUsers)
+                .HasForeignKey(ru => ru.RolId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Rol ↔ Form ↔ Permission (N:N con tabla intermedia RolFormPermission)
+            modelBuilder.Entity<RolFormPermission>()
+                .HasOne(rfp => rfp.Rol)
+                .WithMany(r => r.RolFormPermissions)
+                .HasForeignKey(rfp => rfp.RolId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RolFormPermission>()
+                .HasOne(rfp => rfp.Form)
+                .WithMany(f => f.RolFormPermissions)
+                .HasForeignKey(rfp => rfp.FormId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RolFormPermission>()
+                .HasOne(rfp => rfp.Permission)
+                .WithMany(p => p.RolFormPermissions)
+                .HasForeignKey(rfp => rfp.PermissionId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Form ↔ Module (N:N con FormModule)
+            modelBuilder.Entity<FormModule>()
+                .HasOne(fm => fm.Form)
+                .WithMany(f => f.FormModules)
+                .HasForeignKey(fm => fm.FormId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FormModule>()
+                .HasOne(fm => fm.Module)
+                .WithMany(m => m.FormModules)
+                .HasForeignKey(fm => fm.ModuleId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
+
+            // Aplica configuraciones con IEntityTypeConfiguration<T>
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
 

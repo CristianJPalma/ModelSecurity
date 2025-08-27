@@ -9,17 +9,18 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Data.Implements;
+using Data.Interfaces;
+using Business.Interfaces;
 
 namespace Business
 {   
-    public class LoginBusiness
+    public class LoginBusiness : ILoginBusiness
     {
-        private readonly UserData _userData;
+        private readonly IUserData _userData;
         private readonly ILogger<LoginBusiness> _logger;
         private readonly JwtSettings _jwtSettings;
 
-        public LoginBusiness(UserData userData, ILogger<LoginBusiness> logger, IOptions<JwtSettings> jwtSettings)
+        public LoginBusiness(IUserData userData, ILogger<LoginBusiness> logger, IOptions<JwtSettings> jwtSettings)
         {
             _userData = userData;
             _logger = logger;

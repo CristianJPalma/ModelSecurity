@@ -1,4 +1,4 @@
-using Business;
+using Business.Interfaces;
 using Entity.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,9 +14,9 @@ namespace Web.Controllers.Implements
     [Produces("application/json")]
     public class LoginController : ControllerBase, ILoginController
     {
-        private readonly LoginBusiness _loginBusiness;
+        private readonly ILoginBusiness _loginBusiness;
 
-        public LoginController(LoginBusiness loginBusiness)
+        public LoginController(ILoginBusiness loginBusiness)
         {
             _loginBusiness = loginBusiness;
         }

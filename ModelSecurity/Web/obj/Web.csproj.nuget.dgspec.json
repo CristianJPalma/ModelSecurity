@@ -1,39 +1,45 @@
 {
   "format": 1,
   "restore": {
-    "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Web/Web.csproj": {}
+    "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Web\\Web.csproj": {}
   },
   "projects": {
-    "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Business/Business.csproj": {
+    "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Business\\Business.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Business/Business.csproj",
+        "projectUniqueName": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Business\\Business.csproj",
         "projectName": "Business",
-        "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Business/Business.csproj",
-        "packagesPath": "/home/Cristian/.nuget/packages/",
-        "outputPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Business/obj/",
+        "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Business\\Business.csproj",
+        "packagesPath": "C:\\Users\\Aprendiz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Business\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/Cristian/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Aprendiz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Data/Data.csproj": {
-                "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Data/Data.csproj"
+              "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Data\\Data.csproj"
               },
-              "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/Entity.csproj": {
-                "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/Entity.csproj"
+              "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\Entity.csproj": {
+                "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\Entity.csproj"
               },
-              "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/Utilities.csproj": {
-                "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/Utilities.csproj"
+              "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\Utilities.csproj": {
+                "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\Utilities.csproj"
               }
             }
           }
@@ -69,34 +75,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Data/Data.csproj": {
+    "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Data/Data.csproj",
+        "projectUniqueName": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Data/Data.csproj",
-        "packagesPath": "/home/Cristian/.nuget/packages/",
-        "outputPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Data/obj/",
+        "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\Aprendiz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Data\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/Cristian/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Aprendiz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/Entity.csproj": {
-                "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/Entity.csproj"
+              "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\Entity.csproj": {
+                "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\Entity.csproj"
               }
             }
           }
@@ -138,26 +150,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/Entity.csproj": {
+    "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\Entity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/Entity.csproj",
+        "projectUniqueName": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\Entity.csproj",
         "projectName": "Entity",
-        "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/Entity.csproj",
-        "packagesPath": "/home/Cristian/.nuget/packages/",
-        "outputPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Entity/obj/",
+        "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\Entity.csproj",
+        "packagesPath": "C:\\Users\\Aprendiz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Entity\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/Cristian/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Aprendiz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -223,26 +241,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/Utilities.csproj": {
+    "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\Utilities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/Utilities.csproj",
+        "projectUniqueName": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\Utilities.csproj",
         "projectName": "Utilities",
-        "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/Utilities.csproj",
-        "packagesPath": "/home/Cristian/.nuget/packages/",
-        "outputPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/obj/",
+        "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\Utilities.csproj",
+        "packagesPath": "C:\\Users\\Aprendiz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/Cristian/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Aprendiz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -282,37 +306,43 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Web/Web.csproj": {
+    "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Web\\Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Web/Web.csproj",
+        "projectUniqueName": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Web\\Web.csproj",
         "projectName": "Web",
-        "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Web/Web.csproj",
-        "packagesPath": "/home/Cristian/.nuget/packages/",
-        "outputPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Web/obj/",
+        "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Web\\Web.csproj",
+        "packagesPath": "C:\\Users\\Aprendiz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Web\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/Cristian/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Aprendiz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Business/Business.csproj": {
-                "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Business/Business.csproj"
+              "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Business\\Business.csproj": {
+                "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Business\\Business.csproj"
               },
-              "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/Utilities.csproj": {
-                "projectPath": "/home/Cristian/Documentos/ProyectosCsharp/ModelSecurity/ModelSecurity/Utilities/Utilities.csproj"
+              "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\Utilities.csproj": {
+                "projectPath": "C:\\Users\\Aprendiz\\Documents\\ModelSecurity\\ModelSecurity\\Utilities\\Utilities.csproj"
               }
             }
           }
@@ -385,7 +415,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

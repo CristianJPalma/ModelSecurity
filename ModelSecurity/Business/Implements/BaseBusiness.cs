@@ -12,13 +12,13 @@ namespace Business.Implements
     {
         protected readonly IMapper _mapper;
         protected readonly IBaseData<T> _data;
-        protected readonly ILogger _logger;
+        protected readonly ILogger<BaseBusiness<T,D>> _logger;
 
-        public BaseBusiness(IBaseData<T> data, IMapper mapper, ILogger logger)
+        public BaseBusiness(IBaseData<T> data, IMapper mapper, ILogger<BaseBusiness<T,D>> logger)
         {
-            _data = data ?? throw new ArgumentNullException(nameof(data));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _data = data;
+            _mapper = mapper;
+            _logger = logger;
         }
 
         public override async Task<IEnumerable<D>> GetAllAsync()
@@ -57,10 +57,8 @@ namespace Business.Implements
             {
                 var entity = _mapper.Map<T>(dto);
                 await _data.AddAsync(entity);
-                // Asumo que la entidad se asigna un Id luego del AddAsync.
-                // Entonces, para devolver el DTO actualizado, lo buscamos con GetByIdAsync:
                 var created = await _data.GetByIdAsync(entity.Id);
-                return _mapper.Map<D>(created);
+                 return _mapper.Map<D>(entity);
             }
             catch (Exception ex)
             {

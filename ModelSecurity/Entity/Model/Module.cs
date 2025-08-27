@@ -13,6 +13,6 @@ namespace Entity.Model
         public DateTime CreateAt { get; set; }
         public DateTime? DeleteAt { get; set; }
 
-
+        public ICollection<FormModule> FormModules { get; set; }
     }
 }

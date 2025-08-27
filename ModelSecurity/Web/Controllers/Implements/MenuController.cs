@@ -1,6 +1,6 @@
 using Business;
 using Business.Implements;
-using Data.Implements;
+using Data.Interfaces;
 using Entity.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,12 +15,11 @@ namespace Web.Controllers.Implements
     [Produces("application/json")]
 public class MenuController : ControllerBase
 {
-    private readonly UserBusiness _userBusiness;
-    private readonly UserData _userData;
+    private readonly IUserData _userData;
 
-    public MenuController(UserBusiness userBusiness)
+    public MenuController(IUserData userData)
         {
-            _userBusiness = userBusiness;
+            _userData = userData;
         }
 
     [HttpGet("user/{id}")]

@@ -13,7 +13,8 @@ namespace Entity.Model
         public bool Active { get; set; }
         public DateTime CreateAt { get; set; }
         public DateTime? DeleteAt { get; set; }
-
+        
+        public ICollection<RolFormPermission> RolFormPermissions { get; set; }
 
     }
 }

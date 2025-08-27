@@ -9,6 +9,8 @@ using System.Text;
 using Utilities;
 using Data.Implements;
 using Business.Implements;
+using Data.Interfaces;
+using Business.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,42 +24,32 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registrar clases de Form
-builder.Services.AddScoped<FormData>();
-builder.Services.AddScoped<FormBusiness>();
+builder.Services.AddScoped(typeof(IBaseData<>), typeof(DataBase<>));
+builder.Services.AddScoped(typeof(IBaseBusiness<,>), typeof(BaseBusiness<,>));
 
-// Registrar clases de FormModule
-builder.Services.AddScoped<FormModuleData>();
-builder.Services.AddScoped<FormModuleBusiness>();
+builder.Services.AddScoped<IFormData, FormData>();
+builder.Services.AddScoped<IFormModuleData, FormModuleData>();
+builder.Services.AddScoped<IModuleData, ModuleData>();
+builder.Services.AddScoped<IPermissionData, PermissionData>();
+builder.Services.AddScoped<IPersonData, PersonData>();
+builder.Services.AddScoped<IRolData, RolData>();
+builder.Services.AddScoped<IRolFormPermissionData, RolFormPermissionData>();
+builder.Services.AddScoped<IRolUserData, RolUserData>();
+builder.Services.AddScoped<IUserData, UserData>();
 
-// Registrar clases de Module
-builder.Services.AddScoped<ModuleData>();
-builder.Services.AddScoped<ModuleBusiness>();
-
-// Registrar clases de Permission
-builder.Services.AddScoped<PermissionData>();
-builder.Services.AddScoped<PermissionBusiness>();
-
-// Registrar clases de Person
-builder.Services.AddScoped<PersonData>();
-builder.Services.AddScoped<PersonBusiness>();
-
-// Registrar clases de Rol
-builder.Services.AddScoped<RolData>();
-builder.Services.AddScoped<RolBusiness>();
-
-// Registrar clases de RolFormPermission
-builder.Services.AddScoped<RolFormPermissionData>();
-builder.Services.AddScoped<RolFormPermissionBusiness>();
-
-// Registrar clases de RolUser
-builder.Services.AddScoped<RolUserData>();
-builder.Services.AddScoped<RolUserBusiness>();
+// Y también tus servicios de negocio:
+builder.Services.AddScoped<IFormBusiness, FormBusiness>();
+builder.Services.AddScoped<IFormModuleBusiness, FormModuleBusiness>();
+builder.Services.AddScoped<IModuleBusiness, ModuleBusiness>();
+builder.Services.AddScoped<IPermissionBusiness, PermissionBusiness>();
+builder.Services.AddScoped<IPersonBusiness, PersonBusiness>();
+builder.Services.AddScoped<IRolBusiness, RolBusiness>();
+builder.Services.AddScoped<IRolFormPermissionBusiness, RolFormPermissionBusiness>();
+builder.Services.AddScoped<IRolUserBusiness, RolUserBusiness>();
+builder.Services.AddScoped<IUserBusiness, UserBusiness>();
 
 // Registrar clases de User
-builder.Services.AddScoped<UserData>();
-builder.Services.AddScoped<UserBusiness>();
-builder.Services.AddScoped<LoginBusiness>();
+builder.Services.AddScoped<ILoginBusiness, LoginBusiness>();
 
 // Agregar CORS para permitir cualquier origen
 builder.Services.AddCors(opciones =>
