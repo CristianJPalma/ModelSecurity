@@ -7,13 +7,14 @@ namespace Data.Implements
 {
     public class DataBase<T> : ABaseData<T> where T : BaseModel
     {
-        protected readonly ApplicationDbContext _context;
-        protected readonly DbSet<T> _dbSet;
-        public DataBase(ApplicationDbContext context)
-        {
-            _context = context;
-            _dbSet = _context.Set<T>();
-        }
+    protected readonly IApplicationDbContext _context;
+    protected readonly DbSet<T> _dbSet;
+
+    public DataBase(IApplicationDbContext context)
+    {
+        _context = context;
+        _dbSet = _context.Set<T>();
+    }
         public override async Task<T> GetByIdAsync(int id) => await _dbSet.FindAsync(id);
 
         public override async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.ToListAsync();

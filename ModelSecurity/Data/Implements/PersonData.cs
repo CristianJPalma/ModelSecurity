@@ -6,7 +6,7 @@ namespace Data.Implements
 { 
     public class PersonData : DataBase<Person>, IPersonData
     {
-        public PersonData(ApplicationDbContext context) : base(context)
+        public PersonData(IApplicationDbContext context) : base(context)
         {
         }
     }

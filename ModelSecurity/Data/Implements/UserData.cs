@@ -8,7 +8,7 @@ namespace Data.Implements
 {
     public class UserData : DataBase<User>, IUserData
     {
-        public UserData(ApplicationDbContext context) : base(context)
+        public UserData(IApplicationDbContext context) : base(context)
         {
 
         }

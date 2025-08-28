@@ -14,16 +14,16 @@ namespace Entity.Context
     /// Representa el contexto de la base de datos de la aplicación, proporcionando configuraciones y métodos
     /// para la gestión de entidades y consultas personalizadas con Dapper.
     /// </summary>
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
-        protected readonly IConfiguration _configuration;
+    protected readonly IConfiguration _configuration;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
-            : base(options)
-        {
-            _configuration = configuration;
-        }
-//tablas de la base de datos
+    public ApplicationDbContext(DbContextOptions options, IConfiguration configuration)
+        : base(options)
+    {
+        _configuration = configuration;
+    }
+        //tablas de la base de datos
         public DbSet<Rol> Rol { get; set; }
         public DbSet<Form> Form {get;set;}
 
@@ -34,7 +34,7 @@ namespace Entity.Context
         public DbSet<RolFormPermission> RolFormPermission  {get;set;}
         public DbSet<RolUser> RolUser  {get;set;}
         public DbSet<User> User  {get;set;}
-
+    
               
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -91,6 +91,41 @@ namespace Entity.Context
                 .HasForeignKey(fm => fm.ModuleId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Rol>().HasData(
+                new Rol { Id = 1, Name = "Admin", Description = "Administrador del sistema con todos los privilegios", Active = true, CreateAt = DateTime.Now }
+            );
+
+            modelBuilder.Entity<Permission>().HasData(
+                new Permission { Id = 1, Name = "Agregar", Code = "PERM_ADD", Active = true, CreateAt = DateTime.Now },
+                new Permission { Id = 2, Name = "Editar", Code = "PERM_EDIT", Active = true, CreateAt = DateTime.Now },
+                new Permission { Id = 3, Name = "Eliminar", Code = "PERM_DELETE", Active = true, CreateAt = DateTime.Now },
+                new Permission { Id = 4, Name = "Desactivar", Code = "PERM_DEACTIVATE", Active = true, CreateAt = DateTime.Now }
+            );
+
+            modelBuilder.Entity<Module>().HasData(
+                new Module { Id = 1, Name = "Seguridad", Active = true, CreateAt = DateTime.Now },
+                new Module { Id = 2, Name = "Gestión de Usuarios", Active = true, CreateAt = DateTime.Now }
+            );
+
+            modelBuilder.Entity<Form>().HasData(
+                new Form { Id = 1, Name = "Formulario Persona", Code = "FORM_PERSON", Active = true, CreateAt = DateTime.Now },
+                new Form { Id = 2, Name = "Formulario Usuario", Code = "FORM_USER", Active = true, CreateAt = DateTime.Now },
+                new Form { Id = 3, Name = "Formulario Rol", Code = "FORM_ROL", Active = true, CreateAt = DateTime.Now },
+                new Form { Id = 4, Name = "Formulario Permiso", Code = "FORM_PERMISSION", Active = true, CreateAt = DateTime.Now },
+                new Form { Id = 5, Name = "Formulario Módulo", Code = "FORM_MODULE", Active = true, CreateAt = DateTime.Now },
+                new Form { Id = 6, Name = "Formulario RolUsuario", Code = "FORM_ROLUSER", Active = true, CreateAt = DateTime.Now },
+                new Form { Id = 7, Name = "Formulario RolPermiso", Code = "FORM_ROLFORMPERM", Active = true, CreateAt = DateTime.Now }
+            );
+
+            modelBuilder.Entity<FormModule>().HasData(
+                new FormModule { Id = 1, ModuleId = 1, FormId = 1 },
+                new FormModule { Id = 2, ModuleId = 1, FormId = 2 },
+                new FormModule { Id = 3, ModuleId = 1, FormId = 3 },
+                new FormModule { Id = 4, ModuleId = 1, FormId = 4 },
+                new FormModule { Id = 5, ModuleId = 1, FormId = 5 },
+                new FormModule { Id = 6, ModuleId = 1, FormId = 6 },
+                new FormModule { Id = 7, ModuleId = 1, FormId = 7 }
+            );
             base.OnModelCreating(modelBuilder);
 
             // Aplica configuraciones con IEntityTypeConfiguration<T>

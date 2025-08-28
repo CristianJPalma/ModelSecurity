@@ -6,7 +6,7 @@ namespace Data.Implements
 { 
     public class PermissionData : DataBase<Permission>, IPermissionData
     {
-        public PermissionData(ApplicationDbContext context) : base(context)
+        public PermissionData(IApplicationDbContext context) : base(context)
         {
         }
     }

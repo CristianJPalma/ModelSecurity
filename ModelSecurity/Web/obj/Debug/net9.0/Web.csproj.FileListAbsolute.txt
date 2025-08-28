@@ -1241,3 +1241,13 @@ C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\web\obj\Debug\net9.0\ref
 C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\web\obj\Debug\net9.0\Web.pdb
 C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\web\obj\Debug\net9.0\Web.genruntimeconfig.cache
 C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\web\obj\Debug\net9.0\ref\Web.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\MySqlConnector.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Microsoft.Extensions.Configuration.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Json.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Npgsql.dll
+C:\Users\Aprendiz\Documents\ModelSecurity\ModelSecurity\Web\bin\Debug\net9.0\Npgsql.EntityFrameworkCore.PostgreSQL.dll

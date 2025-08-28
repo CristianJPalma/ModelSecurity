@@ -6,7 +6,7 @@ namespace Data.Implements
 { 
     public class RolUserData : DataBase<RolUser>, IRolUserData
     {
-        public RolUserData(ApplicationDbContext context) : base(context)
+        public RolUserData(IApplicationDbContext context) : base(context)
         {
         }
     }

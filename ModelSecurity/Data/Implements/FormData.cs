@@ -6,7 +6,7 @@ namespace Data.Implements
 {
     public class FormData : DataBase<Form>, IFormData
     {
-        public FormData(ApplicationDbContext context) : base(context)
+        public FormData(IApplicationDbContext context) : base(context)
         {
         }
     }

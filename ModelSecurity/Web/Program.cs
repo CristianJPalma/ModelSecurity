@@ -62,10 +62,22 @@ builder.Services.AddCors(opciones =>
             .AllowAnyMethod();
     });
 });
+var provider = builder.Configuration["DatabaseProvider"];
 
-// Agregar DbContext
-builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
-    opciones.UseSqlServer("name=DefaultConnection"));
+switch (provider)
+{
+    case "SqlServer":
+        builder.Services.AddDbContext<IApplicationDbContext, SqlServerDbContext>();
+        break;
+
+    case "Postgres":
+        builder.Services.AddDbContext<IApplicationDbContext, PostgresDbContext>();
+        break;
+
+    case "MySql":
+        builder.Services.AddDbContext<IApplicationDbContext, MySqlDbContext>();
+        break;
+}
 
 // Agregar configuración de JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

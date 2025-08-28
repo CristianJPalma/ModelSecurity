@@ -6,7 +6,7 @@ namespace Data.Implements
 { 
     public class ModuleData : DataBase<Module>, IModuleData
     {
-        public ModuleData(ApplicationDbContext context) : base(context)
+        public ModuleData(IApplicationDbContext context) : base(context)
         {
         }
     }
